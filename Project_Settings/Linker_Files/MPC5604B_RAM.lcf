@@ -1,0 +1,87 @@
+/* Internal FLASH linker command file for MPC5604B                          */
+/*                                                                          */
+/*               512KB Flash, 32KB SRAM                                     */
+/*                                                                          */
+/* Intended to be used for the stationary example project.                  */
+/*                                                                          */
+/* VERSION: 1.1                                                             */
+
+MEMORY
+{
+    /* SRAM: 0x40000000 - 0x40007FFF */
+    
+    /* Contains interrupt branch tables for both core and INTC module
+     and the ISR handlers code. Note, since the vector base address field
+     of IVPR is defined within the range [0:19] the table must be loaded
+     at an address aligned to 4K boundary.
+     */    
+    exception_handlers: org = 0x40000000,   len = 0x00001000    /* 4K */
+
+    /* Space allocated for both code and variables in order to use the memory
+    more efficiently.*/
+    internal_ram:       org = 0x40001000,   len = 0x00006000 /* 24K */
+    heap:               org = 0x40007000,   len = 0x00000800 /* 2K Heap */
+    stack:              org = 0x40007800,   len = 0x00000800 /* 2K Stack */
+}
+
+SECTIONS
+{
+    GROUP : {
+        .ivor_branch_table (VLECODE) LOAD (ADDR(exception_handlers)) ALIGN (0x10) : {}
+        /* Note if intc_hw_branch_table is used it MUST be loaded at the IVPR + 2KB (0x800).
+        For this device the intc_hw_branch_table should contain entries aligned to 4 bytes.
+        */
+        .intc_hw_branch_table (VLECODE) BIND (ADDR(.ivor_branch_table) + 0x800) /* start address (physical) */ 
+                                        ALIGN(4) : {}
+    } > exception_handlers
+
+    GROUP : {
+        /* Section used for initialization code: __ppc_eabi_init.c,
+        MPC56xx_HWInit.c, MPC56xx_init_*.c and the entry point (__startup).
+        */
+        .init : {}
+        .init_vle (VLECODE) : {
+            *(.init)
+            *(.init_vle)
+        }
+        
+        /* ISR handlers code. */
+        .__exception_handlers  (VLECODE) : {}
+        
+        .text (TEXT) ALIGN(0x10) : {}
+        .text_vle (VLECODE) ALIGN(0x10): {
+            *(.text)
+            *(.text_vle)
+        }
+        
+        .rodata (CONST) : {
+            *(.rdata)
+            *(.rodata)
+        }
+        .ctors : {}
+        .dtors : {}
+        extab : {}
+        extabindex : {}
+    } > internal_ram
+
+    GROUP : {    
+       .__uninitialized_intc_handlertable ALIGN(0x800) : {}
+       .data   : {}
+       .sdata  : {}
+       .sbss   : {}
+       .sdata2 : {}
+       .sbss2  : {}
+       .bss    : {}
+    } > internal_ram
+}
+
+/* Freescale CodeWarrior compiler address designations */
+
+_stack_addr = ADDR(stack)+SIZEOF(stack);
+_stack_end  = ADDR(stack);
+_heap_addr  = ADDR(heap);
+_heap_end   = ADDR(heap)+SIZEOF(heap);
+
+/* Exceptions Handlers Location (used in Exceptions.c for IVPR initialization) */
+
+EXCEPTION_HANDLERS = ADDR(exception_handlers);

@@ -1,0 +1,52 @@
+"./Project_Settings/Startup_Code/__ppc_eabi_init_c.obj"
+"./Project_Settings/Startup_Code/MPC5604B_init_ram_c.obj"
+"./Project_Settings/Startup_Code/MPC5604B_Startup_c.obj"
+"./Project_Settings/Startup_Code/MPC5604B_HWInit_c.obj"
+"./Sources/ivor_branch_table_c.obj"
+"./Sources/IntcInterrupts_c.obj"
+"./Sources/Exceptions_c.obj"
+"./freeRTOS/Demo/MPC5604b_CodeWarrior/main_c.obj"
+"./freeRTOS/Demo/MPC5604b_CodeWarrior/src_hw/sysclk_c.obj"
+"./freeRTOS/Demo/MPC5604b_CodeWarrior/src_hw/sys_init_c.obj"
+"./freeRTOS/Demo/MPC5604b_CodeWarrior/src_hw/swt_init_c.obj"
+"./freeRTOS/Demo/MPC5604b_CodeWarrior/src_hw/pit_c.obj"
+"./freeRTOS/Demo/MPC5604b_CodeWarrior/src_hw/intc_pit_c.obj"
+"./freeRTOS/Demo/MPC5604b_CodeWarrior/src_hw/intc_init_c.obj"
+"./freeRTOS/Source/portable/CodeWarrior/PowerPC_MPC560xB/portasm_s.obj"
+"./freeRTOS/Source/portable/CodeWarrior/PowerPC_MPC560xB/port_c.obj"
+"./freeRTOS/Source/portable/MemMang/heap_1_c.obj"
+"./freeRTOS/Source/timers_c.obj"
+"./freeRTOS/Source/tasks_c.obj"
+"./freeRTOS/Source/stream_buffer_c.obj"
+"./freeRTOS/Source/queue_c.obj"
+"./freeRTOS/Source/list_c.obj"
+"./freeRTOS/Source/event_groups_c.obj"
+"./freeRTOS/Source/croutine_c.obj"
+-sym dwarf-2
+-sym full
+-msgstyle parseable
+-proc zen
+-big
+-fp soft
+-model absolute
+-abi eabi
+-sdata 8
+-sdata2 8
+-nostdlib
+-lcf
+"$(ProjDirPath)/Project_Settings/Linker_Files/MPC5604B_RAM.lcf"
+-m __startup
+-L"$(MCUToolsBaseDirEnv)/PA_Support/ewl/lib"
+-char unsigned
+-application
+-heapsize 32
+-stacksize 32
+-map
+-listclosure
+-mapunused
+-genbinary none
+-srec
+-sreclength 26
+-sreceol dos 
+-l"$(MCUToolsBaseDirEnv)/PA_Support/ewl/lib/libc_E200z0_VLE_Soft.a"
+-l"$(MCUToolsBaseDirEnv)/PA_Support/ewl/lib/librt_E200z0_VLE_Soft.a"

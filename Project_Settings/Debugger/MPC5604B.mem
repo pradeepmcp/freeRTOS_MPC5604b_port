@@ -1,0 +1,90 @@
+// Memory config file for MPC5604B
+// VERSION 1.0
+
+reservedchar 0x21	// display '!' for invalid reads
+
+// On-Chip Flash Memory (Code Flash)
+//range		0x00000000 0x0007FFFF 4 ReadWrite
+reserved	0x00080000 0x001FFFFF
+
+//Code Flash Array Shadow Sector
+//range		0x00200000 0x00203FFF 4 ReadWrite
+reserved	0x00204000 0x003FFFFF
+
+//Code Flash Array Test Sector
+//range		0x00400000 0x00403FFF 4 ReadWrite
+reserved	0x00404000 0x007FFFFF
+
+//Data Flash Array
+//range	0x00800000 0x0080FFFF 4 ReadWrite
+reserved	0x00810000 0x00BFFFFF
+
+//Data Flash Array Test Sector
+//range		0x00C00000 0x00C03FFF 4 ReadWrite
+reserved	0x00C04000 0x00FFFFFF
+
+//Emulation Mapping and External Bus Interface
+//reserved	0x01000000 0x3FFFFFFF
+
+//SRAM
+//range		0x40000000 0x40007FFF 4 ReadWrite
+reserved	0x40008000 0xC3F87FFF
+
+// Code Flash A Configuration, Data Flash A Configuration, System Integration Unit Lite (SIUL), WakeUp Unit (WKPU)
+//range	0xC3F88000 0xC3F97FFF 4 ReadWrite
+reserved 0xC3F98000 0xC3F9FFFF
+
+// Enhanced Modular Input Output System (eMIOS_0, eMIOS_1)
+//range	0xC3FA0000 0xC3FA7FFF 4 ReadWrite
+reserved 0xC3FA8000 0xC3FD7FFF
+
+//System Status and Configuration Module (SSCM), Mode Entry module (MC_ME), Clock Generation Module (MC_CGM), Reset Generation Module (RGM), Power Control Unit (PCU), Real Time Clock / Autonomous Periodic Interrupt (RTC/API), Periodic Interrupt Timer (PIT)
+//range		0xC3FD8000 0xC3FF3FFF 4 ReadWrite
+reserved	0xC3FF4000 0xFFDFFFFF
+
+//Analog-to-Digital Converter 0 (ADC_0),
+//range		0xFFE00000 0xFFE03FFF 4 ReadWrite
+reserved	0xFFE04000 0xFFE2FFFF
+
+//Inter IC Bus Interface Controller 0 (I2C_0)
+//range		0xFFE30000 0xFFE33FFF 4 ReadWrite
+reserved	0xFFE34000 0xFFE3FFFF
+
+//LIN FLEX 0, LIN FLEX 1, LIN FLEX 2, LIN FLEX 3
+//range		0xFFE40000 0xFFE4FFFF 4 ReadWrite
+reserved	0xFFE50000 0xFFE63FFF
+
+//Cross Triggering Unit (CTU)
+//range 	0xFFE64000 0xFFE67FFF 4 ReadWrite
+reserved	0xFFE68000 0xFFE6FFFF
+
+//CAN sampler
+//range 	0xFFE70000 0xFFE73FFF 4 ReadWrite
+reserved 	0xFFE74000 0xFFE7FFFF
+
+//Mirrored range 0x3F80000–0xC3FFFFFF 
+//range 	0xFFE80000 0xFFEFFFFF 4 ReadWrite
+reserved 	0xFFF00000 0xFFF0FFFF
+
+//Memory Protection Unit (MPU)
+//range 	0xFFF10000 0xFFF13FFF 
+reserved 	0xFFF14000 0xFFF37FFF
+
+//Software Watchdog (SWT), System Timer Module (STM), Error Correction Status Module(ECSM)
+//range		0xFFF38000 0xFFF43FFF 4 ReadWrite
+reserved	0xFFF44000 0xFFF47FFF
+
+//Interrupt Controller(INTC)
+//range		0xFFF48000 0xFFF4BFFF 4 ReadWrite
+reserved	0xFFF4C000 0xFFF8FFFF
+
+//DSPI 0, DSPI 1, DSPI 2
+//range		0xFFF90000 0xFFF9BFFF 4 ReadWrite
+reserved	0xFFF9C000 0xFFFBFFFF
+
+//FlexCAN (FlexCAN_0, FlexCAN_1, FlexCAN_2, FlexCAN_3, FlexCAN_4, FlexCAN_5)
+//range		0xFFFC0000 0xFFFD7FFF 4 ReadWrite
+reserved	0xFFFD8000 0xFFFFBFFF
+
+//Boot Assist Module (BAM)
+range		0xFFFFC000 0xFFFFFFFF	4 Read

@@ -1,0 +1,120 @@
+/* Internal FLASH linker command file for MPC5604B                          */
+/*                                                                          */
+/*               512KB Flash, 32KB SRAM                                     */
+/*                                                                          */
+/* Intended to be used for the stationary example project.                  */
+/*                                                                          */
+/* VERSION: 1.1                                                             */
+/*                                                                          */
+
+MEMORY
+{
+    /*FLASH: 0x00000000 - 0x00007FFFF*/
+
+    /* Fixed location required for RCHW and program entry point. */
+    resetvector:           org = 0x00000000,   len = 0x00000008
+
+    /* Contains initializations from __ppc_eabi_init.c,
+     MPC56xx_HWInit.c, MPC56xx_init_*.c and the entry point (__startup).
+     */
+    init:                  org = 0x00000008,   len = 0x00000FF0
+
+    /* Contains interrupt branch tables for both core and INTC module
+     and the ISR handlers code. Note, since the vector base address field
+     of IVPR is defined within the range [0:19] the table must be loaded
+     at an address aligned to 4K boundary.
+     */
+    exception_handlers:    org = 0x00001000,   len = 0x00002000
+
+    /* Space allocated for user code and device initialization.
+    ROM Image address should be set with the start address of this
+    segment in order to instruct the runtime to initialize the
+    static variables. All the section above are ignored for this action. 
+    Please see -romaddr linker option.*/
+    internal_flash:        org = 0x00003000,   len = 0x0007D000
+    
+    /* SRAM: 0x40000000 - 0x40007FFF */
+    internal_ram:          org = 0x40000000,   len = 0x00006000 /* 24K */
+    heap  :                org = 0x40006000,   len = 0x00001000 /* 4K */ 
+    stack :                org = 0x40007000,   len = 0x00001000 /* 4K */
+}
+
+/* This will ensure the rchw and reset vector are not stripped by the linker */
+FORCEACTIVE { "bam_rchw" "bam_resetvector" }
+
+SECTIONS
+{
+    .__bam_bootarea LOAD (ADDR(resetvector)): {} > resetvector
+    
+    GROUP : {
+    /* Section used for initialization code: __ppc_eabi_init.c,
+     MPC56xx_HWInit.c, MPC56xx_init_*.c and the entry point (__startup).
+     */
+      .init LOAD(ADDR(init)) : {}
+      .init_vle (VLECODE) LOAD(_e_init) : {
+        *(.init)
+        *(.init_vle)
+      }
+    } > init
+     
+    GROUP : {
+    /* Fixed length of 0x800 is required for core interrupt branch table.
+    Core IVOR branch table entries must be aligned to 16 bytes.
+    */
+    .ivor_branch_table (VLECODE) LOAD(ADDR(exception_handlers)) ALIGN (0x10) : {}
+    
+    /* Note if intc_hw_branch_table is used it MUST be loaded at the IVPR + 2KB (0x800).
+     For this device the intc_hw_branch_table should contain entries aligned to 4 bytes.
+     */
+    .intc_hw_branch_table (VLECODE) LOAD(_e_ivor_branch_table) ALIGN(0x800) : {}
+    
+    /* ISR handlers code.*/
+    .__exception_handlers  (VLECODE) LOAD(_e_intc_hw_branch_table) : {}
+    } > exception_handlers
+
+    GROUP : {
+      .text : {} 
+      .text_vle (VLECODE) ALIGN(0x08): {
+         *(.text)
+         *(.text_vle)
+       }
+       .rodata (CONST) : {
+         *(.rdata)
+         *(.rodata)
+       }
+       
+       .ctors : {}
+       .dtors : {}
+       extab : {}
+       extabindex : {}
+    } > internal_flash
+
+    GROUP : {
+        /* The INTC module for this device contains up to 221 IRQs.*/
+       .__uninitialized_intc_handlertable ALIGN(2048) : {}
+       .data   : {}
+       .sdata  : {}
+       .sbss   : {}
+       .sdata2 : {}
+       .sbss2  : {}
+       .bss    : {}
+    } > internal_ram
+}
+
+/* Freescale CodeWarrior compiler address designations */
+
+_stack_addr = ADDR(stack)+SIZEOF(stack);
+_stack_end  = ADDR(stack);
+_heap_addr  = ADDR(heap);
+_heap_end   = ADDR(heap)+SIZEOF(heap);
+
+
+/* Exceptions Handlers Location (used in Exceptions.c IVPR initialization)*/
+EXCEPTION_HANDLERS = ADDR(exception_handlers);
+
+/* L2 SRAM Location (used for L2 SRAM initialization) */
+L2SRAM_LOCATION = ADDR(internal_ram);
+
+/* How many writes with stmw, 128 bytes each, are needed to cover
+   the whole L2SRAM (used for L2 SRAM initialization) */
+L2SRAM_CNT = 0x8000 / 128;

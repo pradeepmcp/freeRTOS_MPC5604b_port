@@ -27,11 +27,13 @@ MEMORY
 SECTIONS
 {
     GROUP : {
-        .ivor_branch_table (VLECODE) LOAD (ADDR(exception_handlers)) ALIGN (0x10) : {}
+        /*.ivor_branch_table (VLECODE) LOAD (ADDR(exception_handlers)) ALIGN (0x10) : {} */
+        .ivor_branch_table  (VLECODE) LOAD (ADDR(exception_handlers)) ALIGN (0x10) : {}
         /* Note if intc_hw_branch_table is used it MUST be loaded at the IVPR + 2KB (0x800).
         For this device the intc_hw_branch_table should contain entries aligned to 4 bytes.
         */
-        .intc_hw_branch_table (VLECODE) BIND (ADDR(.ivor_branch_table) + 0x800) /* start address (physical) */ 
+        /*.intc_hw_branch_table (VLECODE) BIND (ADDR(.ivor_branch_table) + 0x800) /* start address (physical) */ 
+        .intc_hw_branch_table  (VLECODE) BIND (ADDR(.ivor_branch_table) + 0x800) /* start address (physical) */
                                         ALIGN(4) : {}
     } > exception_handlers
 
@@ -47,6 +49,7 @@ SECTIONS
         
         /* ISR handlers code. */
         .__exception_handlers  (VLECODE) : {}
+        
         
         .text (TEXT) ALIGN(0x10) : {}
         .text_vle (VLECODE) ALIGN(0x10): {

@@ -57,18 +57,20 @@
 /*
  * The handler for the yield function
  */
-         
+ 
+
 /*
  * Function to start the scheduler running by starting the highest
  * priority task that has thus far been created.
  */
-void vPortStartFirstTask( void );
+extern void vPortStartFirstTask( void );
 
-void portPOP_TASK(void);
-void portPUSH_TASK(void);
-//void portRESTORE_CONTEXT(void);
-void portSAVE_CONTEXT(void);
-
+#if 0
+extern void portPOP_TASK(void);
+extern void portPUSH_TASK(void);
+extern void portRESTORE_CONTEXT(void);
+extern void portSAVE_CONTEXT(void);
+#endif
 extern void pit_ch0_isr(void);
 
 /*
@@ -78,7 +80,7 @@ void prvPortTimerSetup( void );
 
 void vPortTickISR(void);
 
-
+extern  volatile void *  pxCurrentTCB;
 /*-----------------------------------------------------------*/
 
 /*    
@@ -218,6 +220,7 @@ void vPortEndScheduler( void )
 int global_count = 0;
 //__declspec(interrupt)
 //__declspec(section ".__exception_handlers")
+
 void vPortTickISR(void)
 {
 #if 0
@@ -244,6 +247,7 @@ void vPortTickISR(void)
 	}
 }
 
+
 void prvPortTimerSetup(void)
 { 
 #if 0
@@ -269,74 +273,16 @@ void prvPortTimerSetup(void)
   			interrupt_enable, priority, ld_val);
   	PIT_START_TIMER(configUSE_PIT_CHANNEL);
 }
-#if 0
-#if 1 //MCP port vPortYield
-asm void portSAVE_CONTEXT(void)
+
+#if 0 // use the definition in portasm.s
+void vPortStartFirstTask (void)
 {
-	nofralloc
-	
-	e_stw         r1,-0x98 (r1)       // store backchain
-	e_add16i      r1,r1, -0x98        // allocate stack
-	
-	stw 	r0,  0x24 (r1)    /* Store r0 working register  */
-	
-	/* Save SRR0 and SRR1 */
-	mfsrr1  r0                /* Store SRR1 (must be done before enabling EE) */
-	stw     r0,  0x10 (r1)
-	mfsrr0  r0                /* Store SRR0 (must be done before enabling EE) */
-	stw     r0,  0x0C (r1)
-	
-	stw     r3,  0x28 (r1)    /* Store r3 */
-	mfcr    r0                  /* Store CR */
-	stw     r0,  0x20 (r1)
-	mfxer   r0                  /* Store XER */
-	stw     r0,  0x1C (r1)
-	mfctr   r0                  /* Store CTR */
-	stw     r0,  0x18 (r1)
-	mflr    r0                  /* Store LR */
-	stw     r0,  0x14 (r1)
-	
-	/* Save rest of context required by EABI */
-	stw     r12, 0x4C (r1)      /* Store r12 */
-	stw     r11, 0x48 (r1)      /* Store r11 */
-	stw     r10, 0x44 (r1)      /* Store r10 */
-	stw     r9,  0x40 (r1)      /* Store r9 */
-	stw     r8,  0x3C (r1)      /* Store r8 */
-	stw     r7,  0x38 (r1)      /* Store r7 */
-	stw     r6,  0x34 (r1)      /* Store r6 */
-	stw     r5,  0x30 (r1)      /* Store r5 */
-	stw     r4,  0x2C (r1)      /* Store r4 */
-	
-	
-	//e_stmw    r14, 0x50 (r1)    /* save r14-r31 by store word multiple */
-	
-	//msync
-	
-	
-	//e_stw         r1,-0x98 (r1)       # store backchain
-	//e_sub16i      r1,r1, 0x98         # allocate stack
-	
-	
-	//e_stmw    r14, 0x50 (r1)          # save r14-r31 by store word multiple
-	
-	
-	//.long 0x18011124                  # save r0, r3-r12 by e_stmvgprw 0x24 (r1)
-	
-	
-	//.long 0x18211114                  # save CR, LR, CTR, XER by e_stmvsprw 0x14 (r1)
-	
-	//.long 0x1881110C                  # save SRR0, SRR1 by e_stmvsrrw 0x0C (r1)
-	
+	//portSAVE_CONTEXT() 	/* Does the main thread stack needs to be saved here?
+	portPOP_TASK();			/* pxCurrentTCB should already point to the highest priority task */
+	portRESTORE_CONTEXT();
+	__asm (" se_rfi ");					/* Return into the first task */
 }
-
-
-//__asm void portRESTORE_CONTEXT(void)
-#define portRESTORE_CONTEXT() {		\
-	asm (							\
-	"e_add16i      r1, r1, 0x98\n\t"		\
-	"lwz     r31, 0x94 (r1)\n\t"			\
-	);							\
-}
+#endif
 
 #if 0
 
@@ -436,7 +382,7 @@ __asm void portPOP_TASK(void)
   se_lwz    r1, 0x00 (r3)    # load stack pointer
 }
 #endif 
-#if 1
+#if 0
 __asm void vPortYield(void)
 {
     e_bl portSAVE_CONTEXT
@@ -463,5 +409,4 @@ __asm void vPortStartFirstTask(void)
   se_rfi                  //Return into the first task
 }
 #endif
-#endif
-#endif
+

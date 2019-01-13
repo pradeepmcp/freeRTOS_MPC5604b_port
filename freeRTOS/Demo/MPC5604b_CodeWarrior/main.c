@@ -40,9 +40,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-extern portRESTORE_CONTEXT();
-extern portSAVE_CONTEXT();
-
 // MCP
 //#define DEBUG
 
@@ -72,6 +69,9 @@ void vApplicationTickHook(void)
 
 extern int global_count;
 
+TaskHandle_t * task1 = NULL;
+TaskHandle_t * task2 = NULL;
+
 void vLEDTask1 (void *pvParameters)
 {
 	unsigned int ID = (unsigned int)pvParameters;
@@ -99,6 +99,7 @@ void vLEDTask2 (void *pvParameters)
 int main( void )
 {
 	uint32_t mode;
+
 #ifdef DEBUG
 	uint8_t channel;
 	uint32_t interrupt_enable;
@@ -139,8 +140,8 @@ int main( void )
 	SIU.PGPDO[2].R |= 0x0f000000;	
 		
 	
-	xTaskCreate( vLEDTask2, ( const char * const ) "LedTask2", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
-	//xTaskCreate( vLEDTask1, ( const char * const ) "LedTask1", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
+	xTaskCreate( vLEDTask2, ( const char * const ) "LedTask2", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, task2 );
+	xTaskCreate( vLEDTask1, ( const char * const ) "LedTask1", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, task1 );
 	vTaskStartScheduler();
 	
 	for(;;);

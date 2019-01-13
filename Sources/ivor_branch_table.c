@@ -31,52 +31,52 @@ extern void INTC_INTCInterruptHandler(void);
 asm void ivor_branch_table_p0(void) {
 nofralloc
 	.align SIXTEEN_BYTES
-IVOR0trap:  b   IVOR0trap /* Critical Input interrupt handler */ 
+IVOR0trap:  e_b   IVOR0trap /* Critical Input interrupt handler */ 
 
 	.align SIXTEEN_BYTES
-IVOR1trap:  b	IVOR1trap /* Machine check / (NMI) interrupt handler */
+IVOR1trap:  e_b	IVOR1trap /* Machine check / (NMI) interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR2trap:  b	IVOR2trap /* Data Storage interrupt handler */
+IVOR2trap:  e_b	IVOR2trap /* Data Storage interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR3trap:  b	IVOR3trap /* Instruction Storage interrupt handler */
+IVOR3trap:  e_b	IVOR3trap /* Instruction Storage interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR4trap:  b   INTC_INTCInterruptHandler /* External Interrupt interrupt handler */
+IVOR4trap:  e_b   INTC_INTCInterruptHandler /* External Interrupt interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR5trap:  b	IVOR5trap /* Alignment interrupt handler */
+IVOR5trap:  e_b	IVOR5trap /* Alignment interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR6trap:  b	IVOR6trap /* Program interrupt handler */
+IVOR6trap:  e_b	IVOR6trap /* Program interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR7trap:  b	IVOR7trap /* Floating-point unavailable interrupt handler */
+IVOR7trap:  e_b	IVOR7trap /* Floating-point unavailable interrupt handler */
 
 .align SIXTEEN_BYTES
-IVOR8trap:  b	IVOR8trap /* System call interrupt handler */
+IVOR8trap:  e_b	IVOR8trap /* System call interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR9trap:  b	IVOR9trap /* AP unavailable interrupt handler */
+IVOR9trap:  e_b	IVOR9trap /* AP unavailable interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR10trap: b   IVOR10trap /* Decrementer interrupt handler */
+IVOR10trap: e_b   IVOR10trap /* Decrementer interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR11trap:  b	IVOR11trap /* Fixed Interval Timer interrupt handler */
+IVOR11trap: e_b	IVOR11trap /* Fixed Interval Timer interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR12trap:  b	IVOR12trap /* Watchdog Timer interrupt handler */
+IVOR12trap:  e_b	IVOR12trap /* Watchdog Timer interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR13trap:  b	IVOR13trap /* Data TLB Error interrupt handler */
+IVOR13trap:  e_b	IVOR13trap /* Data TLB Error interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR14trap:  b	IVOR14trap /* Instruction TLB Error interrupt handler */
+IVOR14trap:  e_b	IVOR14trap /* Instruction TLB Error interrupt handler */
 
 	.align SIXTEEN_BYTES
-IVOR15trap:  b  IVOR15trap  /* Debug Interrupt */
+IVOR15trap:  e_b  IVOR15trap  /* Debug Interrupt */
 }
 
 #pragma pop

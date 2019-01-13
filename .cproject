@@ -28,7 +28,7 @@
 							<option id="com.freescale.ppc.toolchain.sharedoption.processor.369924460" name="Processor" superClass="com.freescale.ppc.toolchain.sharedoption.processor" value="com.freescale.ppc.toolchain.sharedoption.processor.zen" valueType="enumerated"/>
 							<option id="com.freescale.ppc.toolchain.sharedoption.sym.639461673" name="Store Full Paths To Source Files" superClass="com.freescale.ppc.toolchain.sharedoption.sym" value="true" valueType="boolean"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.freescale.ppc.toolchain.platform.1520563935" name="PowerPC Target Platform" superClass="com.freescale.ppc.toolchain.platform"/>
-							<builder buildPath="${ProjDirPath}/RAM" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;com.freescale.core.ide.cdt.errorParsers.MwErrorParser;com.freescale.core.ide.cdt.errorParsers.MPWErrorParser" id="com.freescale.ppc.toolchain.builder.1045876450" keepEnvironmentInBuildfile="false" name="Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.freescale.ppc.toolchain.builder"/>
+							<builder buildPath="${ProjDirPath}/RAM" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;com.freescale.core.ide.cdt.errorParsers.MwErrorParser;com.freescale.core.ide.cdt.errorParsers.MPWErrorParser" id="com.freescale.ppc.toolchain.builder.1045876450" keepEnvironmentInBuildfile="false" name="Make Builder" parallelBuildOn="true" parallelBuildWorkspaceOn="true" parallelizationNumber="optimal" superClass="com.freescale.ppc.toolchain.builder"/>
 							<tool errorParsers="" id="com.freescale.ppc.toolchain.linker.1916837489" name="PowerPC Linker" superClass="com.freescale.ppc.toolchain.linker">
 								<option id="com.freescale.ppc.toolchain.linker.base.input.entrypoint.1553903301" name="Entry Point:" superClass="com.freescale.ppc.toolchain.linker.base.input.entrypoint" value="__startup" valueType="string"/>
 								<option id="com.freescale.ppc.toolchain.linker.base.input.codeAddress.32375856" name="Code Address" superClass="com.freescale.ppc.toolchain.linker.base.input.codeAddress" value="0x2000" valueType="string"/>
@@ -187,8 +187,6 @@
 							<tool id="com.freescale.ppc.toolchain.preprocessor.543307142" name="PowerPC Preprocessor" superClass="com.freescale.ppc.toolchain.preprocessor.848373602"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.2081601785.Project_Headers/Exceptions_p1.h" name="Exceptions_p1.h" rcbsApplicability="disable" resourcePath="Project_Headers/Exceptions_p1.h" toolsToInvoke=""/>
-					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.2081601785.Project_Headers/IntcInterrupts_p1.h" name="IntcInterrupts_p1.h" rcbsApplicability="disable" resourcePath="Project_Headers/IntcInterrupts_p1.h" toolsToInvoke=""/>
 					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.2081601785.Project_Settings/Startup_Code/MPC5604B_init_flash.c" name="MPC5604B_init_flash.c" rcbsApplicability="disable" resourcePath="Project_Settings/Startup_Code/MPC5604B_init_flash.c" toolsToInvoke="com.freescale.ppc.toolchain.compiler.1667109949.1576660767">
 						<tool errorParsers="" id="com.freescale.ppc.toolchain.compiler.1667109949.1576660767" name="PowerPC Compiler" superClass="com.freescale.ppc.toolchain.compiler.1667109949">
 							<inputType id="com.freescale.ppc.toolchain.compiler.base.input.2015596211" name="com.freescale.ppc.toolchain.cf Compiler Input" superClass="com.freescale.ppc.toolchain.compiler.base.input"/>
@@ -196,10 +194,12 @@
 						</tool>
 					</fileInfo>
 					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.2081601785.Project_Settings/Linker_Files/MPC5604B_FLASH.lcf" name="MPC5604B_FLASH.lcf" rcbsApplicability="disable" resourcePath="Project_Settings/Linker_Files/MPC5604B_FLASH.lcf" toolsToInvoke=""/>
+					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.2081601785.Project_Headers/Exceptions_p1.h" name="Exceptions_p1.h" rcbsApplicability="disable" resourcePath="Project_Headers/Exceptions_p1.h" toolsToInvoke=""/>
+					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.2081601785.Project_Headers/IntcInterrupts_p1.h" name="IntcInterrupts_p1.h" rcbsApplicability="disable" resourcePath="Project_Headers/IntcInterrupts_p1.h" toolsToInvoke=""/>
 					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.2081601785.MPC5604B_readme.txt" name="MPC5604B_readme.txt" rcbsApplicability="disable" resourcePath="MPC5604B_readme.txt" toolsToInvoke=""/>
 					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.2081601785.Prefix/MPC5604B_FLASH_VLE.prefix" name="MPC5604B_FLASH_VLE.prefix" rcbsApplicability="disable" resourcePath="Prefix/MPC5604B_FLASH_VLE.prefix" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry excluding="freeRTOS/Source/portable/CodeWarrior/HCS12|freeRTOS/Source/portable/CodeWarrior/ColdFire_V2|freeRTOS/Source/portable/CodeWarrior/ColdFire_V1|Sources/main.c|freeRTOS/Source/portable/MemMang/heap_5.c|freeRTOS/Source/portable/MemMang/heap_4.c|freeRTOS/Source/portable/MemMang/heap_3.c|freeRTOS/Source/portable/MemMang/heap_2.c|freeRTOS/Demo/ColdFire_MCF52259_CodeWarrior|Demo/ColdFire_MCF52259_CodeWarrior|MPC5604B_readme.txt|Prefix/MPC5604B_FLASH_VLE.prefix|Project_Settings/Startup_Code/MPC5604B_init_flash.c|Project_Settings/Linker_Files/MPC5604B_FLASH.lcf" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="freeRTOS/Demo/MPC5604b_CodeWarrior/include/siu_init.h|freeRTOS/Source/portable/CodeWarrior/HCS12|freeRTOS/Source/portable/CodeWarrior/ColdFire_V2|freeRTOS/Source/portable/CodeWarrior/ColdFire_V1|Sources/main.c|freeRTOS/Source/portable/MemMang/heap_5.c|freeRTOS/Source/portable/MemMang/heap_4.c|freeRTOS/Source/portable/MemMang/heap_3.c|freeRTOS/Source/portable/MemMang/heap_2.c|freeRTOS/Demo/ColdFire_MCF52259_CodeWarrior|Demo/ColdFire_MCF52259_CodeWarrior|MPC5604B_readme.txt|Prefix/MPC5604B_FLASH_VLE.prefix|Project_Settings/Startup_Code/MPC5604B_init_flash.c|Project_Settings/Linker_Files/MPC5604B_FLASH.lcf" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -230,7 +230,7 @@
 							<option id="com.freescale.ppc.toolchain.sharedoption.processor.1860544344" name="Processor" superClass="com.freescale.ppc.toolchain.sharedoption.processor" value="com.freescale.ppc.toolchain.sharedoption.processor.zen" valueType="enumerated"/>
 							<option id="com.freescale.ppc.toolchain.sharedoption.sym.1383981657" name="Store Full Paths To Source Files" superClass="com.freescale.ppc.toolchain.sharedoption.sym" value="true" valueType="boolean"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.freescale.ppc.toolchain.platform.1017740479" name="PowerPC Target Platform" superClass="com.freescale.ppc.toolchain.platform"/>
-							<builder buildPath="${ProjDirPath}/FLASH" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;com.freescale.core.ide.cdt.errorParsers.MwErrorParser;com.freescale.core.ide.cdt.errorParsers.MPWErrorParser" id="com.freescale.ppc.toolchain.builder.1582268921" keepEnvironmentInBuildfile="false" name="Make Builder" superClass="com.freescale.ppc.toolchain.builder"/>
+							<builder buildPath="${ProjDirPath}/FLASH" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;com.freescale.core.ide.cdt.errorParsers.MwErrorParser;com.freescale.core.ide.cdt.errorParsers.MPWErrorParser" id="com.freescale.ppc.toolchain.builder.1582268921" keepEnvironmentInBuildfile="false" name="Make Builder" parallelBuildWorkspaceOn="true" superClass="com.freescale.ppc.toolchain.builder"/>
 							<tool errorParsers="" id="com.freescale.ppc.toolchain.linker.539556188" name="PowerPC Linker" superClass="com.freescale.ppc.toolchain.linker">
 								<option id="com.freescale.ppc.toolchain.linker.base.input.entrypoint.268692246" name="Entry Point:" superClass="com.freescale.ppc.toolchain.linker.base.input.entrypoint" value="__startup" valueType="string"/>
 								<option id="com.freescale.ppc.toolchain.linker.base.input.codeAddress.1012275303" name="Code Address" superClass="com.freescale.ppc.toolchain.linker.base.input.codeAddress" value="0x2000" valueType="string"/>
@@ -317,8 +317,6 @@
 							<inputType id="com.freescale.ppc.toolchain.compiler.base.input.c++.79290442" name="com.freescale.ppc.toolchain.cf Compiler Input" superClass="com.freescale.ppc.toolchain.compiler.base.input.c++"/>
 						</tool>
 					</fileInfo>
-					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.320563131.Project_Headers/Exceptions_p1.h" name="Exceptions_p1.h" rcbsApplicability="disable" resourcePath="Project_Headers/Exceptions_p1.h" toolsToInvoke=""/>
-					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.320563131.Project_Headers/IntcInterrupts_p1.h" name="IntcInterrupts_p1.h" rcbsApplicability="disable" resourcePath="Project_Headers/IntcInterrupts_p1.h" toolsToInvoke=""/>
 					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.320563131.Project_Settings/Startup_Code/MPC5604B_init_ram.c" name="MPC5604B_init_ram.c" rcbsApplicability="disable" resourcePath="Project_Settings/Startup_Code/MPC5604B_init_ram.c" toolsToInvoke="com.freescale.ppc.toolchain.compiler.896504369.1822250383">
 						<tool errorParsers="" id="com.freescale.ppc.toolchain.compiler.896504369.1822250383" name="PowerPC Compiler" superClass="com.freescale.ppc.toolchain.compiler.896504369">
 							<inputType id="com.freescale.ppc.toolchain.compiler.base.input.387727562" name="com.freescale.ppc.toolchain.cf Compiler Input" superClass="com.freescale.ppc.toolchain.compiler.base.input"/>
@@ -326,10 +324,12 @@
 						</tool>
 					</fileInfo>
 					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.320563131.Project_Settings/Linker_Files/MPC5604B_RAM.lcf" name="MPC5604B_RAM.lcf" rcbsApplicability="disable" resourcePath="Project_Settings/Linker_Files/MPC5604B_RAM.lcf" toolsToInvoke=""/>
+					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.320563131.Project_Headers/Exceptions_p1.h" name="Exceptions_p1.h" rcbsApplicability="disable" resourcePath="Project_Headers/Exceptions_p1.h" toolsToInvoke=""/>
+					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.320563131.Project_Headers/IntcInterrupts_p1.h" name="IntcInterrupts_p1.h" rcbsApplicability="disable" resourcePath="Project_Headers/IntcInterrupts_p1.h" toolsToInvoke=""/>
 					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.320563131.MPC5604B_readme.txt" name="MPC5604B_readme.txt" rcbsApplicability="disable" resourcePath="MPC5604B_readme.txt" toolsToInvoke=""/>
 					<fileInfo id="com.freescale.ppc.debug.toolchain.configuration.320563131.Prefix/MPC5604B_RAM_VLE.prefix" name="MPC5604B_RAM_VLE.prefix" rcbsApplicability="disable" resourcePath="Prefix/MPC5604B_RAM_VLE.prefix" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry excluding="freeRTOS/Source/portable/CodeWarrior/HCS12|freeRTOS/Source/portable/CodeWarrior/ColdFire_V2|freeRTOS/Source/portable/CodeWarrior/ColdFire_V1|Sources/main.c|freeRTOS/Source/portable/MemMang/heap_5.c|freeRTOS/Source/portable/MemMang/heap_4.c|freeRTOS/Source/portable/MemMang/heap_3.c|freeRTOS/Source/portable/MemMang/heap_2.c|freeRTOS/Demo/ColdFire_MCF52259_CodeWarrior|Demo/ColdFire_MCF52259_CodeWarrior|Prefix/MPC5604B_RAM_VLE.prefix|MPC5604B_readme.txt|Project_Settings/Linker_Files/MPC5604B_RAM.lcf|Project_Settings/Startup_Code/MPC5604B_init_ram.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="freeRTOS/Demo/MPC5604b_CodeWarrior/include/siu_init.h|freeRTOS/Source/portable/CodeWarrior/HCS12|freeRTOS/Source/portable/CodeWarrior/ColdFire_V2|freeRTOS/Source/portable/CodeWarrior/ColdFire_V1|Sources/main.c|freeRTOS/Source/portable/MemMang/heap_5.c|freeRTOS/Source/portable/MemMang/heap_4.c|freeRTOS/Source/portable/MemMang/heap_3.c|freeRTOS/Source/portable/MemMang/heap_2.c|freeRTOS/Demo/ColdFire_MCF52259_CodeWarrior|Demo/ColdFire_MCF52259_CodeWarrior|Prefix/MPC5604B_RAM_VLE.prefix|MPC5604B_readme.txt|Project_Settings/Linker_Files/MPC5604B_RAM.lcf|Project_Settings/Startup_Code/MPC5604B_init_ram.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

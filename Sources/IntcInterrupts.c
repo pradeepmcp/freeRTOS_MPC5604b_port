@@ -30,6 +30,10 @@
 
 #include "IntcInterrupts.h"     /* Implement functions from this file */
 
+
+// MCP
+//extern  volatile void *  pxCurrentTCB;  
+
 /*---------------------------------------------------------------------------*/
 /* Inline Assembler Defines                                                  */
 /*---------------------------------------------------------------------------*/
@@ -44,6 +48,9 @@ MAKE_HLI_ADDRESS(INTC_EOIR, &INTC.EOIR.R)
 
 /** Address of the MCR -- used for e200z0h initialization */
 MAKE_HLI_ADDRESS(INTC_MCR, &INTC.MCR.R)
+
+//  MCP
+//MAKE_HLI_ADDRESS(pxCurrentTCB_v, &pxCurrentTCB)
 
 /*---------------------------------------------------------------------------*/
 /* Function Implementations                                                  */
@@ -62,7 +69,7 @@ MAKE_HLI_ADDRESS(INTC_MCR, &INTC.MCR.R)
 */ 
 INTCInterruptFn INTCInterruptsHandlerTable[INTC_INTERRUPTS_REQUEST_VECTOR_TABLE_SIZE];
 #pragma pop
-
+#if 0 //moved to portasm.s
 #pragma push /* save the current state */
 #pragma force_active on
 #pragma function_align 16 /* We use 16 bytes alignment for Exception handlers */
@@ -83,13 +90,32 @@ void INTC_INTCInterruptHandler(void)
 
 #else
 
+
 __declspec(interrupt)
 __declspec(section ".__exception_handlers")
 __asm void INTC_INTCInterruptHandler(void)
 {
 nofralloc
+
+	/*
+	 * epilog:
+	 * portSAVE_CONTEXT()
+	 * portPUSH_TASK()
+	 * 
+	 * ISR()
+	 * 
+	 * prolog:
+	 * portPOP_TASK()
+	 * portRESTORE_CONTEXT()
+	 * 
+	 */
+
+	portSAVE_CONTEXT()
+
+#if 0 //working copy
 prolog:
-    stwu    r1, -0x50 (r1)    /* Create stack frame */
+    stw    r1, -0x98 (r1)    /* Create stack frame */
+    addi   r1,r1,(-0x98)
     stw r0,  0x24 (r1)        /* Store r0 working register  */
 
     /* Save SRR0 and SRR1 */
@@ -109,6 +135,7 @@ prolog:
     wrteei  1                   /* Set MSR[EE]=1  */
 
     /* Save rest of context required by EABI */
+    stmw	r14, 0x50 (r1)		/* save r14-r31 by store word multiple */
     stw     r12, 0x4C (r1)      /* Store r12 */
     stw     r11, 0x48 (r1)      /* Store r11 */
     stw     r10, 0x44 (r1)      /* Store r10 */
@@ -126,12 +153,17 @@ prolog:
     stw     r0,  0x18 (r1)
     mflr    r0                  /* Store LR */
     stw     r0,  0x14 (r1)
+    
+    
+    /* Push task */
 
     /* Branch to ISR handler address from SW vector table */
     mtlr    r3                  /* Store ISR address to LR to use for branching later */
     blrl                        /* Branch to ISR, but return here */
 
 epilog:
+	/* Pop task */
+	
     /* Restore context required by EABI (except working registers) */
     lwz     r0,  0x14 (r1)      /* Restore LR */
     mtlr    r0
@@ -141,6 +173,7 @@ epilog:
     mtxer   r0
     lwz     r0,  0x20 (r1)      /* Restore CR */
     mtcrf   0xff, r0
+    lmw     r14, 0x50 (r1)		/* load word multiple r14-r31 */
     lwz     r5,  0x30 (r1)      /* Restore r5 */
     lwz     r6,  0x34 (r1)      /* Restore r6 */
     lwz     r7,  0x38 (r1)      /* Restore r7 */
@@ -176,17 +209,19 @@ epilog:
     lwz     r0,  0x24 (r1)      /* Restore r0 */
 
     /* Restore space on stack */
-    addi    r1, r1, 0x50
+    addi    r1, r1, 0x98
 
     /* End of Interrupt */
     rfi
+#endif // end of working copy
 }
+
 
 #endif
 
 #pragma force_active off
 #pragma pop
-
+#endif
 /**
  * This function can be used to install an interrupt handler for a given
  * interrupt vector. It will also set the Priority Status Register for the

@@ -113,6 +113,83 @@ void vTaskExitCritical( void );
 #define portTASK_FUNCTION_PROTO( vFunction, pvParameters ) void vFunction( void *pvParameters )
 #define portTASK_FUNCTION( vFunction, pvParameters )       void vFunction( void *pvParameters )
 
+#if 0 // Use the definitions in portasm.s
+/* Macro to put task stack pointer into the TCB  (r3 used as scratch register) */
+#define portPUSH_TASK() {											\
+	__asm ("e_lis     r3, pxCurrentTCB@ha");						\
+	__asm ("e_lwz     r3, pxCurrentTCB@l(r3)");						\
+	__asm ("e_stw    r1, 0x00 (r3)");   /* store stack pointer */	\
+}
+
+ /* Macro to get the task stack pointer from the TCB (r3 used as scratch register)*/
+#define portPOP_TASK() {											\
+	__asm ("e_lis    r3, pxCurrentTCB@ha"); 						\
+	__asm ("e_lwz    r3, pxCurrentTCB@l(r3)"); 						\
+	__asm ("e_lwz    r1, 0x00 (r3)"); 	/* load stack pointer */	\
+}
+
+/* Restores context from task stack */
+#define portRESTORE_CONTEXT() {														\
+	__asm (" e_lwz     r0,  0x0C (r1) ");    /* Restore SRR0 */						\
+	__asm (" mtsrr0    r0 ");														\
+	__asm (" e_lwz     r0,  0x10 (r1) ");      /* Restore SRR1 */					\
+	__asm (" mtsrr1    r0 ");														\
+	__asm (" e_lwz     r0,  0x14 (r1) ");      /* Restore LR */						\
+	__asm (" mtlr      r0 ");														\
+	__asm (" e_lwz     r0,  0x18 (r1) ");      /* Restore CTR */					\
+	__asm (" mtctr     r0 ");														\
+	__asm (" e_lwz     r0,  0x1C (r1) ");      /* Restore XER */					\
+	__asm (" mtxer     r0 ");														\
+	__asm (" e_lwz     r0,  0x20 (r1) ");      /* Restore CR */						\
+	__asm (" mtcrf     0xff, r0 ");													\
+	__asm (" e_lwz     r5,  0x30 (r1) ");      /* Restore r5 */						\
+	__asm (" e_lwz     r6,  0x34 (r1) ");      /* Restore r6 */						\
+	__asm (" e_lwz     r7,  0x38 (r1) ");      /* Restore r7 */						\
+	__asm (" e_lwz     r8,  0x3C (r1) ");      /* Restore r8 */						\
+	__asm (" e_lwz     r9,  0x40 (r1) ");      /* Restore r9 */						\
+	__asm (" e_lwz     r10, 0x44 (r1) ");      /* Restore r10 */					\
+	__asm (" e_lwz     r11, 0x48 (r1) ");      /* Restore r11 */					\
+	__asm (" e_lwz     r12, 0x4C (r1) ");      /* Restore r12 */					\
+	__asm (" e_lwz     r3,  0x28 (r1) ");      /* Restore r3 */						\
+	__asm (" e_lwz     r4,  0x2C (r1) ");      /* Restore r4 */						\
+	__asm (" e_lmw     r14, 0x50 (r1) ");      /* load word multiple r14-r31 */		\
+	__asm (" e_lwz     r0,  0x24 (r1) ");      /* Restore r0 */						\
+		/* Restore space on stack */												\
+	__asm ( "e_add16i  r1, r1, 0x98 ");												\
+}
+
+/* Saves context to task stack */
+#define portSAVE_CONTEXT() {																			\
+	__asm ("  	e_stw     r1,-0x98 (r1) ");			/* store backchain 	*/								\
+	__asm ("	e_add16i  r1,r1, -0x98 ");     		/* allocate stack 	*/								\
+	__asm ("    e_stw	  r0,  0x24 (r1) ");		/* Store r0 working register  */					\
+	__asm ("    e_stw     r3,  0x28 (r1) ");   		/* Store r3 */										\
+		/* Save rest of context required by EABI */														\
+	__asm ("    e_stw     r12, 0x4C (r1) ");      	/* Store r12 */										\
+	__asm ("    e_stw     r11, 0x48 (r1) ");      	/* Store r11 */										\
+	__asm ("    e_stw     r10, 0x44 (r1) ");      	/* Store r10 */										\
+	__asm ("    e_stw     r9,  0x40 (r1) ");      	/* Store r9 */										\
+	__asm ("    e_stw     r8,  0x3C (r1) ");      	/* Store r8 */										\
+	__asm ("    e_stw     r7,  0x38 (r1) ");      	/* Store r7 */										\
+	__asm ("    e_stw     r6,  0x34 (r1) ");      	/* Store r6 */										\
+	__asm ("    e_stw     r5,  0x30 (r1) ");      	/* Store r5 */										\
+	__asm ("    e_stw     r4,  0x2C (r1) ");      	/* Store r4 */										\
+	__asm ("    mfcr      r0 ");                 	/* Store CR */										\
+	__asm ("    e_stw     r0,  0x20 (r1) ");															\
+	__asm ("    mfxer     r0 ");                  	/* Store XER */										\
+	__asm ("    e_stw     r0,  0x1C (r1) ");															\
+	__asm ("    mfctr     r0 ");                  	/* Store CTR */										\
+	__asm ("    e_stw     r0,  0x18 (r1) ");															\
+	__asm ("    mflr      r0 ");                  	/* Store LR */										\
+	__asm ("    e_stw     r0,  0x14 (r1) ");															\
+	__asm ("    mfsrr1    r0 ");                	/* Store SRR1 (must be done before enabling EE) */	\
+	__asm ("    e_stw     r0,  0x10 (r1) ");															\
+	__asm ("    mfsrr0    r0 ");                	/* Store SRR0 (must be done before enabling EE) */	\
+	__asm ("    e_stw     r0,  0x0C (r1) ");															\
+	__asm ("  	e_stmw    r14, 0x50 (r1) ");        /* save r14-r31 by store word multiple */			\
+}
+
+#endif
 
 #ifdef __cplusplus
 }

@@ -152,7 +152,7 @@ void pit_init_fnc(void)
 void pit_config(INTCInterruptFn handler_fn, uint8_t channel, uint32_t interrupt_enable, uint16_t priority, uint32_t ld_val)
 {
 	PIT.PITMCR.B.MDIS = 1;
-	PIT.PITMCR.B.FRZ = 0;
+	PIT.PITMCR.B.FRZ = 1;
 	PIT.CH[channel].TCTRL.B.TEN = 0;
 	PIT.CH[channel].TCTRL.R  |= interrupt_enable;
 	PIT.CH[channel].LDVAL.R = ld_val;

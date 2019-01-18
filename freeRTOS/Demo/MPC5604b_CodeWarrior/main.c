@@ -66,6 +66,14 @@ void vApplicationTickHook(void)
 		SIU.PGPDO[2].R ^= 0x04000000;	\
 }
 
+#define TOGGLE_LED3(void) {				\
+		SIU.PGPDO[2].R ^= 0x02000000;	\
+}
+
+#define TOGGLE_LED4(void) {				\
+		SIU.PGPDO[2].R ^= 0x01000000;	\
+}
+
 
 extern int global_count;
 
@@ -90,8 +98,32 @@ void vLEDTask2 (void *pvParameters)
 	SIU.PGPDO[2].R |= 0x04000000;		/* Disable LEDs*/
 
 	for(;;){
-		if (!(global_count % configTICK_RATE_HZ)) {
+		if (!(global_count % (configTICK_RATE_HZ+1))) {
 			TOGGLE_LED2();
+		}
+	}
+}
+
+void vLEDTask3 (void *pvParameters)
+{
+	unsigned int ID = (unsigned int)pvParameters;
+	SIU.PGPDO[2].R |= 0x02000000;		/* Disable LEDs*/
+
+	for(;;){
+		if (!(global_count % (configTICK_RATE_HZ+2))) {
+			TOGGLE_LED3();
+		}
+	}
+}
+
+void vLEDTask4 (void *pvParameters)
+{
+	unsigned int ID = (unsigned int)pvParameters;
+	SIU.PGPDO[2].R |= 0x01000000;		/* Disable LEDs*/
+
+	for(;;){
+		if (!(global_count % (configTICK_RATE_HZ+3))) {
+			TOGGLE_LED4();
 		}
 	}
 }
@@ -137,13 +169,17 @@ int main( void )
 	
 	SIU.PCR[68].R = 0x0200;				/* Program the drive enable pin of LED1 (PE4) as output*/
 	SIU.PCR[69].R = 0x0200;				/* Program the drive enable pin of LED2 (PE5) as output*/
+	SIU.PCR[70].R = 0x0200;				/* Program the drive enable pin of LED3 (PE6) as output*/
+	SIU.PCR[71].R = 0x0200;				/* Program the drive enable pin of LED4 (PE7) as output*/
 	SIU.PGPDO[2].R |= 0x0f000000;	
 		
-	
+	xTaskCreate( vLEDTask4, ( const char * const ) "LedTask4", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
+	xTaskCreate( vLEDTask3, ( const char * const ) "LedTask3", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
 	xTaskCreate( vLEDTask2, ( const char * const ) "LedTask2", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, task2 );
 	xTaskCreate( vLEDTask1, ( const char * const ) "LedTask1", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, task1 );
+	
 	vTaskStartScheduler();
 	
-	for(;;);
+	for(;;){}
 }
 

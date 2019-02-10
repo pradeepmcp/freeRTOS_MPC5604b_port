@@ -65,12 +65,6 @@
  */
 extern void vPortStartFirstTask( void );
 
-#if 0
-extern void portPOP_TASK(void);
-extern void portPUSH_TASK(void);
-extern void portRESTORE_CONTEXT(void);
-extern void portSAVE_CONTEXT(void);
-#endif
 extern void pit_ch0_isr(void);
 
 /*

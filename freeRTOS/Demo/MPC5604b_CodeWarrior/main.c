@@ -83,48 +83,71 @@ TaskHandle_t * task2 = NULL;
 void vLEDTask1 (void *pvParameters)
 {
 	unsigned int ID = (unsigned int)pvParameters;
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = 64;
+	
 	SIU.PGPDO[2].R |= 0x08000000;
+	xLastWakeTime = xTaskGetTickCount();
 
 	for(;;){
-		if (!(global_count % configTICK_RATE_HZ)) {
+		//if (!(global_count % configTICK_RATE_HZ)) {
 			TOGGLE_LED1();
-		}
+			 vTaskDelayUntil( &xLastWakeTime, xFrequency );
+		//}
 	}
 }
 
 void vLEDTask2 (void *pvParameters)
 {
 	unsigned int ID = (unsigned int)pvParameters;
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = 64;
+	
 	SIU.PGPDO[2].R |= 0x04000000;		/* Disable LEDs*/
+	xLastWakeTime = xTaskGetTickCount();
 
 	for(;;){
-		if (!(global_count % (configTICK_RATE_HZ+1))) {
+		//if (!(global_count % (configTICK_RATE_HZ+1))) {
 			TOGGLE_LED2();
-		}
+			 vTaskDelayUntil( &xLastWakeTime, xFrequency );
+		//}
 	}
 }
 
 void vLEDTask3 (void *pvParameters)
 {
 	unsigned int ID = (unsigned int)pvParameters;
+	
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = 64;
+	
 	SIU.PGPDO[2].R |= 0x02000000;		/* Disable LEDs*/
-
+	
+	xLastWakeTime = xTaskGetTickCount();
+	
 	for(;;){
-		if (!(global_count % (configTICK_RATE_HZ+2))) {
+		//if (!(global_count % (configTICK_RATE_HZ+2))) {
 			TOGGLE_LED3();
-		}
+			 vTaskDelayUntil( &xLastWakeTime, xFrequency );
+		//}
 	}
 }
 
 void vLEDTask4 (void *pvParameters)
 {
 	unsigned int ID = (unsigned int)pvParameters;
+	
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = 32;
+	
 	SIU.PGPDO[2].R |= 0x01000000;		/* Disable LEDs*/
-
+	
+	xLastWakeTime = xTaskGetTickCount();
 	for(;;){
-		if (!(global_count % (configTICK_RATE_HZ+3))) {
+		//if (!(global_count % (configTICK_RATE_HZ+3))) {
 			TOGGLE_LED4();
-		}
+			 vTaskDelayUntil( &xLastWakeTime, xFrequency );
+		//}
 	}
 }
 

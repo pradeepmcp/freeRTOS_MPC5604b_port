@@ -35,37 +35,41 @@ Link map of __startup
       5] mode_entry_post_config_fnc (func,global) found in sysclk_c.obj 
      4] mode_entry_change_mode (func,global) found in sysclk_c.obj 
      4] vLEDTask4 (func,global) found in main_c.obj 
-      5] global_count (object,global) found in port_c.obj 
-     4] @160 (object,local) found in main_c.obj 
-     4] xTaskCreate (func,global) found in tasks_c.obj 
-      5] pvPortMalloc (func,global) found in heap_1_c.obj 
-       6] @LOCAL@pvPortMalloc__FUl@pucAlignedHeap (object,local) found in heap_1_c.obj 
-       6] xNextFreeByte (object,local) found in heap_1_c.obj 
+      5] xTaskGetTickCount (func,global) found in tasks_c.obj 
+       6] xTickCount (object,local) found in tasks_c.obj 
+      5] vTaskDelayUntil (func,global) found in tasks_c.obj 
        6] vTaskSuspendAll (func,global) found in tasks_c.obj 
         7] uxSchedulerSuspended (object,local) found in tasks_c.obj 
-       6] ucHeap (object,local) found in heap_1_c.obj 
+       6] prvAddCurrentTaskToDelayedList (func,local) found in tasks_c.obj 
+        7] pxCurrentTCB (object,global) found in tasks_c.obj 
+        7] uxListRemove (func,global) found in list_c.obj 
+        7] xSuspendedTaskList (object,local) found in tasks_c.obj 
+        7] vListInsertEnd (func,global) found in list_c.obj 
+        7] pxOverflowDelayedTaskList (object,local) found in tasks_c.obj 
+        7] vListInsert (func,global) found in list_c.obj 
+        7] pxDelayedTaskList (object,local) found in tasks_c.obj 
+        7] xNextTaskUnblockTime (object,local) found in tasks_c.obj 
        6] xTaskResumeAll (func,global) found in tasks_c.obj 
         7] uxTopReadyPriority (object,local) found in tasks_c.obj 
         7] xYieldPending (object,local) found in tasks_c.obj 
         7] vTaskEnterCritical (func,global) found in tasks_c.obj 
          8] xSchedulerRunning (object,local) found in tasks_c.obj 
-         8] pxCurrentTCB (object,global) found in tasks_c.obj 
         7] uxCurrentNumberOfTasks (object,local) found in tasks_c.obj 
         7] xPendingReadyList (object,local) found in tasks_c.obj 
-        7] uxListRemove (func,global) found in list_c.obj 
         7] pxReadyTasksLists (object,local) found in tasks_c.obj 
-        7] vListInsertEnd (func,global) found in list_c.obj 
         7] prvResetNextTaskUnblockTime (func,local) found in tasks_c.obj 
-         8] pxDelayedTaskList (object,local) found in tasks_c.obj 
-         8] xNextTaskUnblockTime (object,local) found in tasks_c.obj 
         7] uxPendedTicks (object,local) found in tasks_c.obj 
         7] xTaskIncrementTick (func,global) found in tasks_c.obj 
-         8] xTickCount (object,local) found in tasks_c.obj 
-         8] pxOverflowDelayedTaskList (object,local) found in tasks_c.obj 
          8] xNumOfOverflows (object,local) found in tasks_c.obj 
          8] vApplicationTickHook (func,global) found in main_c.obj 
           9] ui32_ms_cnt (object,global) found in main_c.obj 
         7] vTaskExitCritical (func,global) found in tasks_c.obj 
+     4] @160 (object,local) found in main_c.obj 
+     4] xTaskCreate (func,global) found in tasks_c.obj 
+      5] pvPortMalloc (func,global) found in heap_1_c.obj 
+       6] @LOCAL@pvPortMalloc__FUl@pucAlignedHeap (object,local) found in heap_1_c.obj 
+       6] xNextFreeByte (object,local) found in heap_1_c.obj 
+       6] ucHeap (object,local) found in heap_1_c.obj 
       5] vPortFree (func,global) found in heap_1_c.obj 
       5] prvInitialiseNewTask (func,local) found in tasks_c.obj 
        6] vListInitialiseItem (func,global) found in list_c.obj 
@@ -75,7 +79,6 @@ Link map of __startup
         7] vListInitialise (func,global) found in list_c.obj 
         7] xDelayedTaskList1 (object,local) found in tasks_c.obj 
         7] xDelayedTaskList2 (object,local) found in tasks_c.obj 
-        7] xSuspendedTaskList (object,local) found in tasks_c.obj 
        6] uxTaskNumber (object,local) found in tasks_c.obj 
      4] vLEDTask3 (func,global) found in main_c.obj 
      4] @161 (object,local) found in main_c.obj 
@@ -93,6 +96,7 @@ Link map of __startup
       5] xPortStartScheduler (func,global) found in port_c.obj 
        6] prvPortTimerSetup (func,global) found in port_c.obj 
         7] vPortTickISR (func,global) found in port_c.obj 
+         8] global_count (object,global) found in port_c.obj 
          8] vTaskSwitchContext (func,global) found in tasks_c.obj 
         7] pit_config (func,global) found in pit_c.obj 
          8] INTC_InstallINTCInterruptHandler (func,global) found in IntcInterrupts_c.obj 
@@ -233,71 +237,71 @@ Link map of __startup
   000000a0 000000 40001350 000005e0  1 .text.25 	IntcInterrupts_c.obj 
   000000a0 00000e 40001350 000005e0  1 .text 	Exceptions_c.obj 
   000000a0 00000e 40001350 000005e0  2 EXCEP_InitExceptionHandlers 	Exceptions_c.obj 
-  000000ae 000230 4000135e 000005ee  1 .text 	main_c.obj 
+  000000ae 000238 4000135e 000005ee  1 .text 	main_c.obj 
   000000ae 00000e 4000135e 000005ee  2 vApplicationTickHook 	main_c.obj 
-  000000bc 000044 4000136c 000005fc  2 vLEDTask1 	main_c.obj 
-  00000100 000054 400013b0 00000640  2 vLEDTask2 	main_c.obj 
-  00000154 000054 40001404 00000694  2 vLEDTask3 	main_c.obj 
-  000001a8 000054 40001458 000006e8  2 vLEDTask4 	main_c.obj 
-  000001fc 0000e2 400014ac 0000073c  2 main 	main_c.obj 
-  000002de 000000 4000158e 0000081e  1 .text.176 	main_c.obj 
-  000002de 0004f6 4000158e 0000081e  1 .text 	sysclk_c.obj 
-  000002de 00001c 4000158e 0000081e  2 sysclk_module_init_fnc 	sysclk_c.obj 
-  000002fa 00027c 400015aa 0000083a  2 mode_entry_init_fnc 	sysclk_c.obj 
-  00000576 000126 40001826 00000ab6  2 sysclk_init_fnc 	sysclk_c.obj 
-  0000069c 00002a 4000194c 00000bdc  2 cmu_init_fnc 	sysclk_c.obj 
-  000006c6 0000c2 40001976 00000c06  2 mode_entry_post_config_fnc 	sysclk_c.obj 
-  00000788 00004c 40001a38 00000cc8  2 mode_entry_change_mode 	sysclk_c.obj 
-  000007d4 000000 40001a84 00000d14  1 .text.67 	sysclk_c.obj 
-  000007d4 000020 40001a84 00000d14  1 .text 	sys_init_c.obj 
-  000007d4 000020 40001a84 00000d14  2 sys_init_fnc 	sys_init_c.obj 
-  000007f4 000000 40001aa4 00000d34  1 .text.20 	sys_init_c.obj 
-  000007f4 000250 40001aa4 00000d34  1 .text 	pit_c.obj 
-  000007f4 000194 40001aa4 00000d34  2 pit_init_fnc 	pit_c.obj 
-  00000988 0000bc 40001c38 00000ec8  2 pit_config 	pit_c.obj 
-  00000a44 000000 40001cf4 00000f84  1 .text.28 	pit_c.obj 
-  00000a44 0007c8 40001cf4 00000f84  1 .text 	intc_init_c.obj 
-  00000a44 0007be 40001cf4 00000f84  2 intc_init_fnc 	intc_init_c.obj 
-  00001202 00000a 400024b2 00001742  2 en_int_fnc 	intc_init_c.obj 
-  0000120c 000000 400024bc 0000174c  1 .text.15 	intc_init_c.obj 
-  0000120c 000274 400024bc 0000174c  1 .text 	portasm_s.obj 
-  0000120c 000274 400024bc 0000174c  4 _@DummyFn1 	portasm_s.obj 
-  0000120c 000000 400024bc 0000174c    vPortStartFirstTask (entry of .text) 	portasm_s.obj 
-  0000127e 000000 4000252e 000017be    INTC_INTCInterruptHandler (entry of .text) 	portasm_s.obj 
-  00001398 000000 40002648 000018d8    vPortYield (entry of .text) 	portasm_s.obj 
-  00001480 0001be 40002730 000019c0  1 .text 	port_c.obj 
-  00001480 000112 40002730 000019c0  2 pxPortInitialiseStack 	port_c.obj 
-  00001592 00001a 40002842 00001ad2  2 xPortStartScheduler 	port_c.obj 
+  000000bc 000052 4000136c 000005fc  2 vLEDTask1 	main_c.obj 
+  0000010e 000052 400013be 0000064e  2 vLEDTask2 	main_c.obj 
+  00000160 000052 40001410 000006a0  2 vLEDTask3 	main_c.obj 
+  000001b2 000052 40001462 000006f2  2 vLEDTask4 	main_c.obj 
+  00000204 0000e2 400014b4 00000744  2 main 	main_c.obj 
+  000002e6 000000 40001596 00000826  1 .text.176 	main_c.obj 
+  000002e6 0004f6 40001596 00000826  1 .text 	sysclk_c.obj 
+  000002e6 00001c 40001596 00000826  2 sysclk_module_init_fnc 	sysclk_c.obj 
+  00000302 00027c 400015b2 00000842  2 mode_entry_init_fnc 	sysclk_c.obj 
+  0000057e 000126 4000182e 00000abe  2 sysclk_init_fnc 	sysclk_c.obj 
+  000006a4 00002a 40001954 00000be4  2 cmu_init_fnc 	sysclk_c.obj 
+  000006ce 0000c2 4000197e 00000c0e  2 mode_entry_post_config_fnc 	sysclk_c.obj 
+  00000790 00004c 40001a40 00000cd0  2 mode_entry_change_mode 	sysclk_c.obj 
+  000007dc 000000 40001a8c 00000d1c  1 .text.67 	sysclk_c.obj 
+  000007dc 000020 40001a8c 00000d1c  1 .text 	sys_init_c.obj 
+  000007dc 000020 40001a8c 00000d1c  2 sys_init_fnc 	sys_init_c.obj 
+  000007fc 000000 40001aac 00000d3c  1 .text.20 	sys_init_c.obj 
+  000007fc 000250 40001aac 00000d3c  1 .text 	pit_c.obj 
+  000007fc 000194 40001aac 00000d3c  2 pit_init_fnc 	pit_c.obj 
+  00000990 0000bc 40001c40 00000ed0  2 pit_config 	pit_c.obj 
+  00000a4c 000000 40001cfc 00000f8c  1 .text.28 	pit_c.obj 
+  00000a4c 0007c8 40001cfc 00000f8c  1 .text 	intc_init_c.obj 
+  00000a4c 0007be 40001cfc 00000f8c  2 intc_init_fnc 	intc_init_c.obj 
+  0000120a 00000a 400024ba 0000174a  2 en_int_fnc 	intc_init_c.obj 
+  00001214 000000 400024c4 00001754  1 .text.15 	intc_init_c.obj 
+  00001214 000274 400024c4 00001754  1 .text 	portasm_s.obj 
+  00001214 000274 400024c4 00001754  4 _@DummyFn1 	portasm_s.obj 
+  00001214 000000 400024c4 00001754    vPortStartFirstTask (entry of .text) 	portasm_s.obj 
+  00001286 000000 40002536 000017c6    INTC_INTCInterruptHandler (entry of .text) 	portasm_s.obj 
+  000013a0 000000 40002650 000018e0    vPortYield (entry of .text) 	portasm_s.obj 
+  00001488 0001be 40002738 000019c8  1 .text 	port_c.obj 
+  00001488 000112 40002738 000019c8  2 pxPortInitialiseStack 	port_c.obj 
+  0000159a 00001a 4000284a 00001ada  2 xPortStartScheduler 	port_c.obj 
   UNUSED   000006 ........ ........    vPortEndScheduler port_c.obj 
-  000015ac 000032 4000285c 00001aec  2 vPortTickISR 	port_c.obj 
-  000015de 000060 4000288e 00001b1e  2 prvPortTimerSetup 	port_c.obj 
-  0000163e 000000 400028ee 00001b7e  1 .text.146 	port_c.obj 
-  0000163e 000086 400028ee 00001b7e  1 .text 	heap_1_c.obj 
-  0000163e 000084 400028ee 00001b7e  2 pvPortMalloc 	heap_1_c.obj 
-  000016c2 000002 40002972 00001c02  2 vPortFree 	heap_1_c.obj 
+  000015b4 000032 40002864 00001af4  2 vPortTickISR 	port_c.obj 
+  000015e6 000060 40002896 00001b26  2 prvPortTimerSetup 	port_c.obj 
+  00001646 000000 400028f6 00001b86  1 .text.146 	port_c.obj 
+  00001646 000086 400028f6 00001b86  1 .text 	heap_1_c.obj 
+  00001646 000084 400028f6 00001b86  2 pvPortMalloc 	heap_1_c.obj 
+  000016ca 000002 4000297a 00001c0a  2 vPortFree 	heap_1_c.obj 
   UNUSED   000008 ........ ........    vPortInitialiseBlocks heap_1_c.obj 
   UNUSED   00000e ........ ........    xPortGetFreeHeapSize heap_1_c.obj 
-  000016c4 000000 40002974 00001c04  1 .text.137 	heap_1_c.obj 
-  000016c4 000682 40002974 00001c04  1 .text 	tasks_c.obj 
-  000016c4 00008a 40002974 00001c04  2 xTaskCreate 	tasks_c.obj 
-  0000174e 0000b8 400029fe 00001c8e  2 prvInitialiseNewTask 	tasks_c.obj 
-  00001806 0000be 40002ab6 00001d46  2 prvAddNewTaskToReadyList 	tasks_c.obj 
-  UNUSED   00008a ........ ........    vTaskDelayUntil tasks_c.obj 
+  000016cc 000000 4000297c 00001c0c  1 .text.137 	heap_1_c.obj 
+  000016cc 0007ae 4000297c 00001c0c  1 .text 	tasks_c.obj 
+  000016cc 00008a 4000297c 00001c0c  2 xTaskCreate 	tasks_c.obj 
+  00001756 0000b8 40002a06 00001c96  2 prvInitialiseNewTask 	tasks_c.obj 
+  0000180e 0000be 40002abe 00001d4e  2 prvAddNewTaskToReadyList 	tasks_c.obj 
+  000018cc 00008a 40002b7c 00001e0c  2 vTaskDelayUntil 	tasks_c.obj 
   UNUSED   000050 ........ ........    vTaskDelay tasks_c.obj 
   UNUSED   0000cc ........ ........    vTaskSuspend tasks_c.obj 
   UNUSED   00003c ........ ........    prvTaskIsTaskSuspended tasks_c.obj 
   UNUSED   000090 ........ ........    vTaskResume tasks_c.obj 
   UNUSED   000088 ........ ........    xTaskResumeFromISR tasks_c.obj 
-  000018c4 00005c 40002b74 00001e04  2 vTaskStartScheduler 	tasks_c.obj 
+  00001956 00005c 40002c06 00001e96  2 vTaskStartScheduler 	tasks_c.obj 
   UNUSED   000022 ........ ........    vTaskEndScheduler tasks_c.obj 
-  00001920 00000e 40002bd0 00001e60  2 vTaskSuspendAll 	tasks_c.obj 
-  0000192e 00011c 40002bde 00001e6e  2 xTaskResumeAll 	tasks_c.obj 
-  UNUSED   000012 ........ ........    xTaskGetTickCount tasks_c.obj 
+  000019b2 00000e 40002c62 00001ef2  2 vTaskSuspendAll 	tasks_c.obj 
+  000019c0 00011c 40002c70 00001f00  2 xTaskResumeAll 	tasks_c.obj 
+  00001adc 000012 40002d8c 0000201c  2 xTaskGetTickCount 	tasks_c.obj 
   UNUSED   000018 ........ ........    xTaskGetTickCountFromISR tasks_c.obj 
   UNUSED   000006 ........ ........    uxTaskGetNumberOfTasks tasks_c.obj 
   UNUSED   000022 ........ ........    pcTaskGetName tasks_c.obj 
-  00001a4a 000126 40002cfa 00001f8a  2 xTaskIncrementTick 	tasks_c.obj 
-  00001b70 000082 40002e20 000020b0  2 vTaskSwitchContext 	tasks_c.obj 
+  00001aee 000126 40002d9e 0000202e  2 xTaskIncrementTick 	tasks_c.obj 
+  00001c14 000082 40002ec4 00002154  2 vTaskSwitchContext 	tasks_c.obj 
   UNUSED   000028 ........ ........    vTaskPlaceOnEventList tasks_c.obj 
   UNUSED   000034 ........ ........    vTaskPlaceOnUnorderedEventList tasks_c.obj 
   UNUSED   00008e ........ ........    xTaskRemoveFromEventList tasks_c.obj 
@@ -306,16 +310,16 @@ Link map of __startup
   UNUSED   00000e ........ ........    vTaskInternalSetTimeOutState tasks_c.obj 
   UNUSED   000078 ........ ........    xTaskCheckForTimeOut tasks_c.obj 
   UNUSED   000008 ........ ........    vTaskMissedYield tasks_c.obj 
-  00001bf2 000042 40002ea2 00002132  2 prvIdleTask 	tasks_c.obj 
-  00001c34 000078 40002ee4 00002174  2 prvInitialiseTaskLists 	tasks_c.obj 
-  00001cac 000002 40002f5c 000021ec  2 prvCheckTasksWaitingTermination 	tasks_c.obj 
-  00001cae 00002c 40002f5e 000021ee  2 prvResetNextTaskUnblockTime 	tasks_c.obj 
+  00001c96 000042 40002f46 000021d6  2 prvIdleTask 	tasks_c.obj 
+  00001cd8 000078 40002f88 00002218  2 prvInitialiseTaskLists 	tasks_c.obj 
+  00001d50 000002 40003000 00002290  2 prvCheckTasksWaitingTermination 	tasks_c.obj 
+  00001d52 00002c 40003002 00002292  2 prvResetNextTaskUnblockTime 	tasks_c.obj 
   UNUSED   000012 ........ ........    xTaskGetCurrentTaskHandle tasks_c.obj 
   UNUSED   0000ba ........ ........    xTaskPriorityInherit tasks_c.obj 
   UNUSED   00008c ........ ........    xTaskPriorityDisinherit tasks_c.obj 
   UNUSED   0000a0 ........ ........    vTaskPriorityDisinheritAfterTimeout tasks_c.obj 
-  00001cda 000034 40002f8a 0000221a  2 vTaskEnterCritical 	tasks_c.obj 
-  00001d0e 000038 40002fbe 0000224e  2 vTaskExitCritical 	tasks_c.obj 
+  00001d7e 000034 4000302e 000022be  2 vTaskEnterCritical 	tasks_c.obj 
+  00001db2 000038 40003062 000022f2  2 vTaskExitCritical 	tasks_c.obj 
   UNUSED   000022 ........ ........    uxTaskResetEventItemValue tasks_c.obj 
   UNUSED   00001c ........ ........    pvTaskIncrementMutexHeldCount tasks_c.obj 
   UNUSED   00007e ........ ........    ulTaskNotifyTake tasks_c.obj 
@@ -324,28 +328,28 @@ Link map of __startup
   UNUSED   000102 ........ ........    xTaskGenericNotifyFromISR tasks_c.obj 
   UNUSED   0000b2 ........ ........    vTaskNotifyGiveFromISR tasks_c.obj 
   UNUSED   00004e ........ ........    xTaskNotifyStateClear tasks_c.obj 
-  UNUSED   000090 ........ ........    prvAddCurrentTaskToDelayedList tasks_c.obj 
-  00001d46 000000 40002ff6 00002286  1 .text.975 	tasks_c.obj 
-  00001d46 000078 40002ff6 00002286  1 .text 	list_c.obj 
-  00001d46 00001c 40002ff6 00002286  2 vListInitialise 	list_c.obj 
-  00001d62 000006 40003012 000022a2  2 vListInitialiseItem 	list_c.obj 
-  00001d68 000024 40003018 000022a8  2 vListInsertEnd 	list_c.obj 
-  UNUSED   000046 ........ ........    vListInsert list_c.obj 
-  00001d8c 000032 4000303c 000022cc  2 uxListRemove 	list_c.obj 
-  00001dbe 000000 4000306e 000022fe  1 .text.86 	list_c.obj 
-  00001dbe 000040 4000306e 000022fe  1 .text 	libc_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_C\EWL_C.PA_CmdLineData\libc_E200z0_VLE_Soft\obj\abort_exit.o
+  00001dea 000090 4000309a 0000232a  2 prvAddCurrentTaskToDelayedList 	tasks_c.obj 
+  00001e7a 000000 4000312a 000023ba  1 .text.975 	tasks_c.obj 
+  00001e7a 0000be 4000312a 000023ba  1 .text 	list_c.obj 
+  00001e7a 00001c 4000312a 000023ba  2 vListInitialise 	list_c.obj 
+  00001e96 000006 40003146 000023d6  2 vListInitialiseItem 	list_c.obj 
+  00001e9c 000024 4000314c 000023dc  2 vListInsertEnd 	list_c.obj 
+  00001ec0 000046 40003170 00002400  2 vListInsert 	list_c.obj 
+  00001f06 000032 400031b6 00002446  2 uxListRemove 	list_c.obj 
+  00001f38 000000 400031e8 00002478  1 .text.86 	list_c.obj 
+  00001f38 000040 400031e8 00002478  1 .text 	libc_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_C\EWL_C.PA_CmdLineData\libc_E200z0_VLE_Soft\obj\abort_exit.o
   UNUSED   00002c ........ ........    abort libc_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_C\EWL_C.PA_CmdLineData\libc_E200z0_VLE_Soft\obj\abort_exit.o
   UNUSED   000004 ........ ........    atexit libc_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_C\EWL_C.PA_CmdLineData\libc_E200z0_VLE_Soft\obj\abort_exit.o
-  00001dbe 000040 4000306e 000022fe  2 exit 	libc_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_C\EWL_C.PA_CmdLineData\libc_E200z0_VLE_Soft\obj\abort_exit.o
+  00001f38 000040 400031e8 00002478  2 exit 	libc_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_C\EWL_C.PA_CmdLineData\libc_E200z0_VLE_Soft\obj\abort_exit.o
   UNUSED   00002a ........ ........    __atexit libc_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_C\EWL_C.PA_CmdLineData\libc_E200z0_VLE_Soft\obj\abort_exit.o
   UNUSED   000056 ........ ........    __exit libc_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_C\EWL_C.PA_CmdLineData\libc_E200z0_VLE_Soft\obj\abort_exit.o
-  00001dfe 000000 400030ae 0000233e  1 .text.86 	libc_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_C\EWL_C.PA_CmdLineData\libc_E200z0_VLE_Soft\obj\abort_exit.o
-  00001dfe 000032 400030ae 0000233e  1 .text 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\global_destructor_chain.o
+  00001f78 000000 40003228 000024b8  1 .text.86 	libc_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_C\EWL_C.PA_CmdLineData\libc_E200z0_VLE_Soft\obj\abort_exit.o
+  00001f78 000032 40003228 000024b8  1 .text 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\global_destructor_chain.o
   UNUSED   000010 ........ ........    __register_global_object librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\global_destructor_chain.o
-  00001dfe 000032 400030ae 0000233e  2 __destroy_global_chain 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\global_destructor_chain.o
+  00001f78 000032 40003228 000024b8  2 __destroy_global_chain 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\global_destructor_chain.o
   UNUSED   00003a ........ ........    __register_atexit librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\global_destructor_chain.o
-  00001e30 000000 400030e0 00002370  1 .text.104 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\global_destructor_chain.o
-  00001e30 000008 400030e0 00002370  1 .text 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
+  00001faa 000000 4000325a 000024ea  1 .text.104 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\global_destructor_chain.o
+  00001faa 000008 4000325a 000024ea  1 .text 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
   UNUSED   00004a ........ ........    __save_gpr librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
   UNUSED   000000 ........ ........    _savegpr_14 librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
   UNUSED   000000 ........ ........    _save32gpr_14 librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
@@ -420,7 +424,7 @@ Link map of __startup
   UNUSED   000000 ........ ........    _rest32gpr_30 librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
   UNUSED   000000 ........ ........    _restgpr_31 librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
   UNUSED   000000 ........ ........    _rest32gpr_31 librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
-  00001e30 000008 400030e0 00002370  2 __restore_frame_and_exit 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
+  00001faa 000008 4000325a 000024ea  2 __restore_frame_and_exit 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
   UNUSED   000000 ........ ........    __finish_restore_frame_and_exit2 librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
   UNUSED   00000a ........ ........    __restore_gpr_31_exit librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
   UNUSED   000000 ........ ........    __finish_restore_frame_and_exit librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
@@ -468,15 +472,15 @@ Link map of __startup
   UNUSED   00001a ........ ........    __shl2i librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
   UNUSED   00001a ........ ........    __shr2u librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
   UNUSED   00001c ........ ........    __shr2i librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
-  00001e38 000000 400030e8 00002378  1 .text.205 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
+  00001fb2 000000 40003262 000024f2  1 .text.205 	librt_E200z0_VLE_Soft.a D:\w\EPPC\workspace_codegen\ewl\EWL_Runtime\Runtime_PA_CmdLineData\librt_E200z0_VLE_Soft\obj\runtime.o
 
 
 .rodata section layout
   Starting        Virtual  File
   address  Size   address  offset
   ---------------------------------
-  00000000 00000c 400030e8 00002378  1 .rodata 	__ppc_eabi_init_c.obj 
-  00000000 00000c 400030e8 00002378  4 @22 	__ppc_eabi_init_c.obj 
+  00000000 00000c 40003268 000024f8  1 .rodata 	__ppc_eabi_init_c.obj 
+  00000000 00000c 40003268 000024f8  4 @22 	__ppc_eabi_init_c.obj 
 
 
 .ctors section layout
@@ -604,26 +608,26 @@ Memory map:
              .init_vle 4000108c 00000208 00000320         22
   .__exception_handlers 400012a0 00000004 00000530         48
                  .text 400012a4 00000000 00000540          0
-             .text_vle 400012b0 00001e38 00000540         49
-               .rodata 400030e8 0000000c 00002378        436
-                .ctors 400030f4 00000000 00002384          0
-                .dtors 400030f4 00000000 00002384          0
-                 extab 400030f4 00000000 00002384          0
-            extabindex 400030f4 00000000 00002384          0
+             .text_vle 400012b0 00001fb4 00000540         49
+               .rodata 40003268 0000000c 000024f8        455
+                .ctors 40003274 00000000 00002504          0
+                .dtors 40003274 00000000 00002504          0
+                 extab 40003274 00000000 00002504          0
+            extabindex 40003274 00000000 00002504          0
   .__uninitialized_intc_handlertable 40003800 00000348 00002800          0
-                 .data 40003b48 00000030 00002800        437
-                .sdata 40003b78 00000008 00002830        440
+                 .data 40003b48 00000030 00002800        456
+                .sdata 40003b78 00000008 00002830        459
                  .sbss 40003b80 00000064 00002838          0
                .sdata2 40003be4 00000000 00002838          0
                 .sbss2 40003be4 00000000 00002838          0
                   .bss 40003be8 000018b4 00002838          0
-      .PPC.EMB.apuinfo 0000ad30 00000000 0000d570          0
+      .PPC.EMB.apuinfo 0000b390 00000000 0000dbd0          0
          .debug_abbrev          00000177 00002838
-           .debug_info          0000347e 000029af
-        .debug_aranges          00000020 00005e2d
-           .debug_line          000051b5 00005e4d
-            .debug_loc          000008f7 0000b002
-       .debug_pubnames          00000692 0000b8f9
+           .debug_info          000037a4 000029af
+        .debug_aranges          00000020 00006153
+           .debug_line          000052d8 00006173
+            .debug_loc          00000a44 0000b44b
+       .debug_pubnames          000006cc 0000be8f
 
 
 Linker generated symbols:
@@ -648,22 +652,22 @@ _f___exception_handlers_rom 400012a0
                   _e_text 400012a4
               _f_text_vle 400012b0
           _f_text_vle_rom 400012b0
-              _e_text_vle 400030e8
-                _f_rodata 400030e8
-            _f_rodata_rom 400030e8
-                _e_rodata 400030f4
-                 _f_ctors 400030f4
-             _f_ctors_rom 400030f4
-                 _e_ctors 400030f4
-                 _f_dtors 400030f4
-             _f_dtors_rom 400030f4
-                 _e_dtors 400030f4
-                  _fextab 400030f4
-              _fextab_rom 400030f4
-                  _eextab 400030f4
-             _fextabindex 400030f4
-         _fextabindex_rom 400030f4
-             _eextabindex 400030f4
+              _e_text_vle 40003264
+                _f_rodata 40003268
+            _f_rodata_rom 40003268
+                _e_rodata 40003274
+                 _f_ctors 40003274
+             _f_ctors_rom 40003274
+                 _e_ctors 40003274
+                 _f_dtors 40003274
+             _f_dtors_rom 40003274
+                 _e_dtors 40003274
+                  _fextab 40003274
+              _fextab_rom 40003274
+                  _eextab 40003274
+             _fextabindex 40003274
+         _fextabindex_rom 40003274
+             _eextabindex 40003274
 _f___uninitialized_intc_handlertable 40003800
 _e___uninitialized_intc_handlertable 40003b48
                   _f_data 40003b48
@@ -685,7 +689,7 @@ _e___uninitialized_intc_handlertable 40003b48
                _stack_end 40007800
                _heap_addr 40007000
                 _heap_end 40007800
-             _nbfunctions 00000041
+             _nbfunctions 00000045
            SIZEOF_HEADERS 000001a0
                _SDA_BASE_ 4000bb78
               _SDA2_BASE_ 4000bbe4

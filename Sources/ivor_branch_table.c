@@ -18,6 +18,7 @@ extern "C" {
 
 /* IVOR4 will call this handler */
 extern void INTC_INTCInterruptHandler(void);
+extern void vPortYield(void);
 
 #pragma push
 
@@ -55,7 +56,7 @@ IVOR6trap:  e_b	IVOR6trap /* Program interrupt handler */
 IVOR7trap:  e_b	IVOR7trap /* Floating-point unavailable interrupt handler */
 
 .align SIXTEEN_BYTES
-IVOR8trap:  e_b	IVOR8trap /* System call interrupt handler */
+IVOR8trap:  e_b	vPortYield /* System call interrupt handler */
 
 	.align SIXTEEN_BYTES
 IVOR9trap:  e_b	IVOR9trap /* AP unavailable interrupt handler */

@@ -77,8 +77,46 @@ void vApplicationTickHook(void)
 
 extern int global_count;
 
-TaskHandle_t * task1 = NULL;
-TaskHandle_t * task2 = NULL;
+TaskHandle_t  task1 = NULL;
+TaskHandle_t  task2 = NULL;
+
+void led1ToggleTask1 (void *pvParameters)
+{
+	unsigned int ID = (unsigned int)pvParameters;
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = configTICK_RATE_HZ;
+	uint8_t count = 0;
+	UBaseType_t curr_prio;
+
+	
+	SIU.PGPDO[2].R |= 0x08000000;
+	xLastWakeTime = xTaskGetTickCount();
+
+	for(;;){
+		TOGGLE_LED1();
+		vTaskDelayUntil( &xLastWakeTime, xFrequency );
+
+		if(count == 10) {
+			curr_prio = uxTaskPriorityGet(task2);
+			vTaskPrioritySet(task2, curr_prio+2);
+		}
+		count ++;
+	}
+}
+
+void emptyTask (void *pvParameters)
+{
+	unsigned int ID = (unsigned int)pvParameters;
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = configTICK_RATE_HZ/2;
+	
+	SIU.PGPDO[2].R |= 0x08000000;
+	xLastWakeTime = xTaskGetTickCount();
+
+	for(;;){
+	}
+}
+
 
 void vLEDTask1 (void *pvParameters)
 {
@@ -90,10 +128,8 @@ void vLEDTask1 (void *pvParameters)
 	xLastWakeTime = xTaskGetTickCount();
 
 	for(;;){
-		//if (!(global_count % configTICK_RATE_HZ)) {
-			TOGGLE_LED1();
-			 vTaskDelayUntil( &xLastWakeTime, xFrequency );
-		//}
+		TOGGLE_LED1();
+		vTaskDelayUntil( &xLastWakeTime, xFrequency );
 	}
 }
 
@@ -107,10 +143,8 @@ void vLEDTask2 (void *pvParameters)
 	xLastWakeTime = xTaskGetTickCount();
 
 	for(;;){
-		//if (!(global_count % (configTICK_RATE_HZ+1))) {
-			TOGGLE_LED2();
-			 vTaskDelayUntil( &xLastWakeTime, xFrequency );
-		//}
+		TOGGLE_LED2();
+		vTaskDelayUntil( &xLastWakeTime, xFrequency );
 	}
 }
 
@@ -126,10 +160,8 @@ void vLEDTask3 (void *pvParameters)
 	xLastWakeTime = xTaskGetTickCount();
 	
 	for(;;){
-		//if (!(global_count % (configTICK_RATE_HZ+2))) {
-			TOGGLE_LED3();
-			 vTaskDelayUntil( &xLastWakeTime, xFrequency );
-		//}
+		TOGGLE_LED3();
+		vTaskDelayUntil( &xLastWakeTime, xFrequency );
 	}
 }
 
@@ -144,10 +176,9 @@ void vLEDTask4 (void *pvParameters)
 	
 	xLastWakeTime = xTaskGetTickCount();
 	for(;;){
-		//if (!(global_count % (configTICK_RATE_HZ+3))) {
-			TOGGLE_LED4();
-			 vTaskDelayUntil( &xLastWakeTime, xFrequency );
-		//}
+		TOGGLE_LED4();
+		vTaskDelayUntil( &xLastWakeTime, xFrequency );
+
 	}
 }
 
@@ -195,11 +226,24 @@ int main( void )
 	SIU.PCR[70].R = 0x0200;				/* Program the drive enable pin of LED3 (PE6) as output*/
 	SIU.PCR[71].R = 0x0200;				/* Program the drive enable pin of LED4 (PE7) as output*/
 	SIU.PGPDO[2].R |= 0x0f000000;	
-		
+
+#if 0 //Enable this code to check multiple task switching 
 	xTaskCreate( vLEDTask4, ( const char * const ) "LedTask4", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
 	xTaskCreate( vLEDTask3, ( const char * const ) "LedTask3", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
-	xTaskCreate( vLEDTask2, ( const char * const ) "LedTask2", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, task2 );
-	xTaskCreate( vLEDTask1, ( const char * const ) "LedTask1", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, task1 );
+	xTaskCreate( vLEDTask2, ( const char * const ) "LedTask2", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
+	xTaskCreate( vLEDTask1, ( const char * const ) "LedTask1", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
+#endif
+	
+#if 1 //Enable this code to test vTaskPrioritySet()
+	/*
+	 * led1ToggleTask1() runs initially. 
+	 * Toggles LED1 for 10 times.
+	 * Changes the priority of emptyTask to  mainLED_TASK_PRIORITY+2 from mainLED_TASK_PRIORITY.
+	 * emptyTask never yields since it is of higher priority now and the LED stops blinking. 
+	 */
+	xTaskCreate( led1ToggleTask1, ( const char * const ) "LedTask1", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY+1, &task1 );
+	xTaskCreate( emptyTask, ( const char * const ) "empty task", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, &task2 );
+#endif
 	
 	vTaskStartScheduler();
 	

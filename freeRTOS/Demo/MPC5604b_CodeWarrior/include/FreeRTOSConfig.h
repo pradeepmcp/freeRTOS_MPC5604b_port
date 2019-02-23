@@ -23,7 +23,7 @@
  * init_sys(), configures RUN0 with pll to 64MHZ and also as sysclk
  */
 #define configCPU_CLOCK_HZ                         ((unsigned portLONG ) 64000000 )
-#define configTICK_RATE_HZ                         ((TickType_t) 64 )
+#define configTICK_RATE_HZ                         ((TickType_t) 1000 )
 
 #define configMAX_PRIORITIES                       (( unsigned portBASE_TYPE ) 5 )
 #define configMINIMAL_STACK_SIZE                   ((unsigned portSHORT ) 256)

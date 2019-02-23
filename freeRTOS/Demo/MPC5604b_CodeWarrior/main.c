@@ -84,7 +84,7 @@ void vLEDTask1 (void *pvParameters)
 {
 	unsigned int ID = (unsigned int)pvParameters;
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 64;
+	const TickType_t xFrequency = configTICK_RATE_HZ;
 	
 	SIU.PGPDO[2].R |= 0x08000000;
 	xLastWakeTime = xTaskGetTickCount();
@@ -101,7 +101,7 @@ void vLEDTask2 (void *pvParameters)
 {
 	unsigned int ID = (unsigned int)pvParameters;
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 64;
+	const TickType_t xFrequency = 100;
 	
 	SIU.PGPDO[2].R |= 0x04000000;		/* Disable LEDs*/
 	xLastWakeTime = xTaskGetTickCount();
@@ -119,7 +119,7 @@ void vLEDTask3 (void *pvParameters)
 	unsigned int ID = (unsigned int)pvParameters;
 	
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 64;
+	const TickType_t xFrequency = 10;
 	
 	SIU.PGPDO[2].R |= 0x02000000;		/* Disable LEDs*/
 	
@@ -138,7 +138,7 @@ void vLEDTask4 (void *pvParameters)
 	unsigned int ID = (unsigned int)pvParameters;
 	
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 32;
+	const TickType_t xFrequency = 50;
 	
 	SIU.PGPDO[2].R |= 0x01000000;		/* Disable LEDs*/
 	

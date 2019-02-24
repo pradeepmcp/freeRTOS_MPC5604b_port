@@ -18,3 +18,5 @@ c/c++ build -> settings -> PowerPC CPU -> Compress for PowerPC VLE (zen)
 c/c++ build -> settings -> PowerPC Compiler -> Processor -> Translate PPC ASM to VLE ASM (ZEN)
 
 "Compress for PowerPC VLE (zen)" makes sure code is placed in .text_vle section instead of .text section. 
+
+

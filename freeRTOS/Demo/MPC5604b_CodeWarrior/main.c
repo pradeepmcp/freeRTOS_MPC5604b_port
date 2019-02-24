@@ -122,7 +122,7 @@ void vLEDTask1 (void *pvParameters)
 {
 	unsigned int ID = (unsigned int)pvParameters;
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = configTICK_RATE_HZ;
+	const TickType_t xFrequency = pdMS_TO_TICKS(10);
 	
 	SIU.PGPDO[2].R |= 0x08000000;
 	xLastWakeTime = xTaskGetTickCount();
@@ -137,7 +137,7 @@ void vLEDTask2 (void *pvParameters)
 {
 	unsigned int ID = (unsigned int)pvParameters;
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 100;
+	const TickType_t xFrequency = pdMS_TO_TICKS(20);
 	
 	SIU.PGPDO[2].R |= 0x04000000;		/* Disable LEDs*/
 	xLastWakeTime = xTaskGetTickCount();
@@ -153,7 +153,7 @@ void vLEDTask3 (void *pvParameters)
 	unsigned int ID = (unsigned int)pvParameters;
 	
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 10;
+	const TickType_t xFrequency = pdMS_TO_TICKS(40);
 	
 	SIU.PGPDO[2].R |= 0x02000000;		/* Disable LEDs*/
 	
@@ -170,7 +170,7 @@ void vLEDTask4 (void *pvParameters)
 	unsigned int ID = (unsigned int)pvParameters;
 	
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 50;
+	const TickType_t xFrequency = pdMS_TO_TICKS(80);
 	
 	SIU.PGPDO[2].R |= 0x01000000;		/* Disable LEDs*/
 	
@@ -227,14 +227,15 @@ int main( void )
 	SIU.PCR[71].R = 0x0200;				/* Program the drive enable pin of LED4 (PE7) as output*/
 	SIU.PGPDO[2].R |= 0x0f000000;	
 
-#if 0 //Enable this code to check multiple task switching 
+#if test_MULTITASK_SWITCHING //Enable this code to check multiple task switching 
 	xTaskCreate( vLEDTask4, ( const char * const ) "LedTask4", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
 	xTaskCreate( vLEDTask3, ( const char * const ) "LedTask3", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
 	xTaskCreate( vLEDTask2, ( const char * const ) "LedTask2", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
 	xTaskCreate( vLEDTask1, ( const char * const ) "LedTask1", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
+
 #endif
 	
-#if 1 //Enable this code to test vTaskPrioritySet()
+#if test_TASK_PRIORITY_API //Enable this code to test vTaskPrioritySet()
 	/*
 	 * led1ToggleTask1() runs initially. 
 	 * Toggles LED1 for 10 times.

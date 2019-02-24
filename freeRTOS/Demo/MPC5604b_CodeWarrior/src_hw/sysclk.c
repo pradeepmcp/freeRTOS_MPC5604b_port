@@ -557,10 +557,11 @@ void sysclk_init_fnc(void)
         /* The XOSC Clock Interrupt: Disabled    */
         /* The XOSC Clock Divider: 1    */
 
-    CGM.FMPLL_CR.R = 0x02400100;
-        /* Input Division Factor: 0    */
-        /* Output Division Factor: 2    */
-        /* Loop Division Factor: 64    */
+    CGM.FMPLL_CR.R = 0x05280100;
+     	/* Refer FMPLL lookup table in MPC5604BCRM
+        /* Input Division Factor: 1    */
+        /* Output Division Factor: 1    */
+        /* Loop Division Factor: 40   */
         /* Progressive Clock Switching Enabled in Standby Mode    */
 
     CGM.FMPLL_MR.R = 0x20000000;

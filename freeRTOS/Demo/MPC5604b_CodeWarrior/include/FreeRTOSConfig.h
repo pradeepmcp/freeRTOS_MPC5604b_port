@@ -22,7 +22,7 @@
  * tune this to the actual frequency used by the PIT in RUN0 mode 
  * init_sys(), configures RUN0 with pll to 64MHZ and also as sysclk
  */
-#define configCPU_CLOCK_HZ                         ((unsigned portLONG ) 64000000 )
+#define configCPU_CLOCK_HZ                         ((unsigned portLONG ) 80000000 )
 #define configTICK_RATE_HZ                         ((TickType_t) 1000 )
 
 #define configMAX_PRIORITIES                       (( unsigned portBASE_TYPE ) 5 )
@@ -61,8 +61,13 @@ to exclude the API function. */
 #define INCLUDE_xTaskGetCurrentTaskHandle         0
 #define INCLUDE_uxTaskGetStackHighWaterMark       0
 
+/* Convert time in MS to ticks */
+#ifndef pdMS_TO_TICKS 
+#define pdMS_TO_TICKS(xTimeInMs) ((TickType_t) (((TickType_t) (xTimeInMs) * (TickType_t) configTICK_RATE_HZ) / (TickType_t) 1000))
+#endif
 
-
+#define test_TASK_PRIORITY_API					  0
+#define test_MULTITASK_SWITCHING 				  0
 
 #endif /* FREERTOS_CONFIG_H */
 

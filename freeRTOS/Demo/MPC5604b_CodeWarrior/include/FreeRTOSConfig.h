@@ -68,6 +68,7 @@ to exclude the API function. */
 
 #define test_TASK_PRIORITY_API					  0
 #define test_MULTITASK_SWITCHING 				  0
+#define test_QUEUE_SEND_RECEIVE_API			  0
 
 #endif /* FREERTOS_CONFIG_H */
 

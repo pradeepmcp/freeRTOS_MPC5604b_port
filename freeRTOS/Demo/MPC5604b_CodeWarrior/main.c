@@ -39,9 +39,25 @@
 #include "MPC5604B.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "queue.h"
 
 // MCP
 //#define DEBUG
+#ifdef test_QUEUE_SEND_RECEIVE_API
+
+typedef enum _LED {
+  FIRST = 1,
+  SECOND,
+  THIRD,
+  FOURTH
+} LED_t;
+
+void vQueueReceive(void *pvParameters);
+void vQueueSend(void *pvParameters);
+
+QueueHandle_t  ledQueue;
+
+#endif
 
 void vLEDTask( void *pvParameters );
 #define mainLED_TASK_PRIORITY                ( tskIDLE_PRIORITY + 2 )
@@ -182,6 +198,55 @@ void vLEDTask4 (void *pvParameters)
 	}
 }
 
+
+void vQueueReceive(void *pvParameters)
+{
+	LED_t rx_LED;
+	for (;;) {
+		if (NULL != ledQueue){
+			
+			if(xQueueReceive(ledQueue,&rx_LED,(TickType_t)10) == pdTRUE) {
+			 
+			 switch (rx_LED){
+			 	 case 1:
+			 		 TOGGLE_LED1();
+			 		 break;
+			 	 case 2:
+			 		 TOGGLE_LED2();
+			 		 break;
+			 	 case 3:
+			 		 TOGGLE_LED3();
+			 		 break;
+			 	 case 4:
+			 		 TOGGLE_LED4();
+			 		 break;
+			 	 default:
+			 		 break;
+			 	 }
+			}
+		}
+		/*
+		 * Need this Delay after processing queue each item for blinking to be visible.
+		 */
+		vTaskDelay(10);
+	}
+}
+
+
+void vQueueSend(void *pvParameters)
+{
+	LED_t tx_LED = 0;
+	
+	for (;;){
+		if (NULL != ledQueue){
+			if(xQueueSend(ledQueue,&tx_LED,(TickType_t)10) != pdFALSE){
+				tx_LED = (tx_LED + 1) % 5;
+			}
+		}
+	}
+	
+}
+
 int main( void )
 {
 	uint32_t mode;
@@ -246,6 +311,16 @@ int main( void )
 	xTaskCreate( emptyTask, ( const char * const ) "empty task", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, &task2 );
 #endif
 	
+#if test_QUEUE_SEND_RECEIVE_API
+	
+	ledQueue = xQueueCreate(1,sizeof(LED_t));
+	
+	xTaskCreate( vQueueSend, ( const char * const ) "QueueSend", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
+	xTaskCreate( vQueueReceive, ( const char * const ) "QueueReceive", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
+
+#endif
+	
+	// keep demo functions above starting scheduler
 	vTaskStartScheduler();
 	
 	for(;;){}

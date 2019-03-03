@@ -66,9 +66,11 @@ to exclude the API function. */
 #define pdMS_TO_TICKS(xTimeInMs) ((TickType_t) (((TickType_t) (xTimeInMs) * (TickType_t) configTICK_RATE_HZ) / (TickType_t) 1000))
 #endif
 
+// Macros to enable/disable specific tests
 #define test_TASK_PRIORITY_API					  0
 #define test_MULTITASK_SWITCHING 				  0
-#define test_QUEUE_SEND_RECEIVE_API			  0
+#define test_QUEUE_SEND_RECEIVE_API			      0
+#define test_BINARY_SEMAPHORE_API			      1
 
 #endif /* FREERTOS_CONFIG_H */
 

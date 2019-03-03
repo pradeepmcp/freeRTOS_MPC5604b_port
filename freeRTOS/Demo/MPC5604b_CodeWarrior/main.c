@@ -40,24 +40,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
-
-// MCP
-//#define DEBUG
-#ifdef test_QUEUE_SEND_RECEIVE_API
-
-typedef enum _LED {
-  FIRST = 1,
-  SECOND,
-  THIRD,
-  FOURTH
-} LED_t;
-
-void vQueueReceive(void *pvParameters);
-void vQueueSend(void *pvParameters);
-
-QueueHandle_t  ledQueue;
-
-#endif
+#include "semphr.h"
 
 void vLEDTask( void *pvParameters );
 #define mainLED_TASK_PRIORITY                ( tskIDLE_PRIORITY + 2 )
@@ -198,6 +181,17 @@ void vLEDTask4 (void *pvParameters)
 	}
 }
 
+#if test_QUEUE_SEND_RECEIVE_API
+typedef enum _LED {
+  FIRST = 1,
+  SECOND,
+  THIRD,
+  FOURTH
+} LED_t;
+
+QueueHandle_t  ledQueue;
+void vQueueReceive(void *pvParameters);
+void vQueueSend(void *pvParameters);
 
 void vQueueReceive(void *pvParameters)
 {
@@ -232,7 +226,6 @@ void vQueueReceive(void *pvParameters)
 	}
 }
 
-
 void vQueueSend(void *pvParameters)
 {
 	LED_t tx_LED = 0;
@@ -246,6 +239,47 @@ void vQueueSend(void *pvParameters)
 	}
 	
 }
+#endif
+
+
+#if test_BINARY_SEMAPHORE_API
+
+xSemaphoreHandle binarySem;
+void vSemTaskSend(void *pvParameters);
+void vSemTaskTake(void *pvParameters);
+
+void vSemTaskSend(void *pvParameters)
+{
+	for (;;)
+	{
+		const TickType_t xTicksToWait = pdMS_TO_TICKS(100);
+		
+		if(NULL != binarySem) 
+		{
+			xSemaphoreTake(binarySem,xTicksToWait);
+			TOGGLE_LED1();	
+			xSemaphoreGive(binarySem);
+			vTaskDelay(50);
+		}
+	}	
+}
+
+void vSemTaskTake(void *pvParameters)
+{
+	for (;;)
+	{
+		const TickType_t xTicksToWait = pdMS_TO_TICKS(100);
+		
+		if(NULL != binarySem) 
+		{
+			xSemaphoreTake(binarySem,xTicksToWait);
+			TOGGLE_LED4();	
+			xSemaphoreGive(binarySem);
+			vTaskDelay(50);
+		}
+	}
+}
+#endif
 
 int main( void )
 {
@@ -312,14 +346,18 @@ int main( void )
 #endif
 	
 #if test_QUEUE_SEND_RECEIVE_API
-	
 	ledQueue = xQueueCreate(1,sizeof(LED_t));
 	
 	xTaskCreate( vQueueSend, ( const char * const ) "QueueSend", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
 	xTaskCreate( vQueueReceive, ( const char * const ) "QueueReceive", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
-
 #endif
 	
+#if test_BINARY_SEMAPHORE_API
+	binarySem = xSemaphoreCreateBinary();
+	xTaskCreate( vSemTaskSend, ( const char * const ) "SemTaskSend", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
+	xTaskCreate( vSemTaskTake, ( const char * const ) "SemTaskTake", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
+#endif
+
 	// keep demo functions above starting scheduler
 	vTaskStartScheduler();
 	

@@ -309,9 +309,29 @@ void prvTask2(void *pvParameters)
 }
 #endif
 
+#if test_PIT_CH1_INTERRUPT
+
+#define PIT_CH1 1
+/* Debug variable to keep the count of times the ISR is executed. */
+uint32_t count=0;
+
+void pit_ch1_ISR(void)
+{
+    PIT.CH[PIT_CH1].TFLG.R = 0x00000001;
+    count++;
+}
+#endif
+
 int main( void )
 {
 	uint32_t mode;
+	
+#if test_PIT_CH1_INTERRUPT
+	uint16_t interrupt_enable = 1;
+	uint8_t priority = PIT_CH1_INT_PRIORITY;
+	uint32_t ld_val = ((configCPU_CLOCK_HZ/20) -1);
+#endif
+	
 	//init_sys();
 	sys_init_fnc();
 	
@@ -323,6 +343,12 @@ int main( void )
 	SIU.PCR[70].R = 0x0200;				/* Program the drive enable pin of LED3 (PE6) as output*/
 	SIU.PCR[71].R = 0x0200;				/* Program the drive enable pin of LED4 (PE7) as output*/
 	SIU.PGPDO[2].R |= 0x0f000000;	
+
+#if test_PIT_CH1_INTERRUPT
+  	pit_config(pit_ch1_ISR, PIT_CH1,
+  			interrupt_enable, priority, ld_val);
+  	PIT_START_TIMER(PIT_CH1);
+#endif
 
 #if test_MULTITASK_SWITCHING //Enable this code to check multiple task switching 
 	xTaskCreate( vLEDTask4, ( const char * const ) "LedTask4", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );

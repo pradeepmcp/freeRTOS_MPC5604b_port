@@ -211,7 +211,6 @@ void vPortEndScheduler( void )
       }
 }
 /*-----------------------------------------------------------*/
-int global_count = 0;
 //__declspec(interrupt)
 //__declspec(section ".__exception_handlers")
 
@@ -230,8 +229,7 @@ void vPortTickISR(void)
 		#endif
 	}
 #endif
-    PIT.CH[0].TFLG.R = 0x00000001;
-    global_count++;
+    PIT.CH[TICK_PIT_CHANNEL].TFLG.R = 0x00000001;
     if (xTaskIncrementTick() != pdFALSE)
 	{
 		#if (configUSE_PREEMPTION == 1)
@@ -260,12 +258,12 @@ void prvPortTimerSetup(void)
 	uint32_t ld_val;
 	
   	interrupt_enable = 1;
-  	priority = 15;
+  	priority = TICK_INTERRUPT_PRIOROTY;
   	ld_val = TICK_INTERVAL;
   	
-  	pit_config(vPortTickISR, configUSE_PIT_CHANNEL,
+  	pit_config(vPortTickISR, TICK_PIT_CHANNEL,
   			interrupt_enable, priority, ld_val);
-  	PIT_START_TIMER(configUSE_PIT_CHANNEL);
+  	PIT_START_TIMER(TICK_PIT_CHANNEL);
 }
 
 #if 0 // use the definition in portasm.s

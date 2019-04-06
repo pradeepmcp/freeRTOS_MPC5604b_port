@@ -18,6 +18,34 @@ c/c++ build -> settings -> PowerPC Compiler -> Processor -> Translate PPC ASM to
 
 "Compress for PowerPC VLE (zen)" makes sure code is placed in .text_vle section instead of .text section. 
 
+
+Directory structure:
+Only specific files are mentioned below for brevity. 
+Root                                                                             
+  |---freeRTOS 
+  |    |---Demo
+  |		   |---MPC5604b_CodeWarrior
+  |		   		|---include
+  |    				|---freeRTOSConfig.h                                                      
+  |				|---src_hw     (Machine init specific code)
+  |				|---main.c 	   (Application code)                                                             
+  |    |---Source                                                                
+  |        |---include                                                           
+  |             |---portable                                                     
+  |                  |---CodeWarrior                                             
+  |                  |    |---PowerPC_MPC560xB  (MPC5604B specific code. Refer freeRTOS documentation for more details.)                                
+  |                  |         |---port.c                                        
+  |                  |         |---portmacro.h 
+  |					 |		   |---portasm.s                                  
+  |                  |---MemMang                                                 
+  |                  |    |---heap_1.c                                           
+  |                                                                              
+  |---Sources(Codewarrior project specific code)                                 
+  |    |---main.c                                                                
+  |    |---src_hw                  
+  |---Project_Headers 
+ 
+ 
 Currently tested:
 Scheduler
 vTaskDelayUntil()
@@ -25,3 +53,6 @@ vTaskPrioritySet() and vTaskPriorityGet()
 Queue send and receive
 Binary semaphore
 xTaskNotifyGive() and xTaskNotifyTake() as mutex between two processes. 
+
+                                                           
+  

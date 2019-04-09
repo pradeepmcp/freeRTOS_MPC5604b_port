@@ -228,7 +228,7 @@ void prvPortTimerSetup(void)
 	uint32_t ld_val;
 	
   	interrupt_enable = 1;
-  	priority = TICK_INTERRUPT_PRIOROTY;
+	priority = TICK_INTERRUPT_PRIOROTY;
   	ld_val = TICK_INTERVAL;
   	
   	pit_config(vPortTickISR, TICK_PIT_CHANNEL,

@@ -196,6 +196,7 @@ void vQueueSend(void *pvParameters);
 void vQueueReceive(void *pvParameters)
 {
 	LED_t rx_LED;
+
 	for (;;) {
 		if (NULL != ledQueue){
 			
@@ -236,6 +237,7 @@ void vQueueSend(void *pvParameters)
 				tx_LED = (tx_LED + 1) % 5;
 			}
 		}
+		vTaskDelay(10);
 	}
 	
 }
@@ -281,6 +283,19 @@ void vSemTaskTake(void *pvParameters)
 }
 #endif
 
+#if test_PIT_CH1_INTERRUPT
+
+ #define PIT_CH1 1
+/* Debug variable to keep the count of times the ISR is executed. */
+uint32_t count=0;
+
+ void pit_ch1_ISR(void)
+{
+    PIT.CH[PIT_CH1].TFLG.R = 0x00000001;
+    count++;
+}
+#endif
+
 #if test_TASK_NOTIFICATIONS
 TaskHandle_t	xTask1 = NULL;
 TaskHandle_t	xTask2 = NULL;
@@ -298,8 +313,8 @@ void prvTask1(void *pvParameters)
 void prvTask2(void *pvParameters)
 {
 	TickType_t xLastWakeTime;
-
-	for(;;){
+	
+ 	for(;;){
 		while(!xTask1){};
 		TOGGLE_LED2();
 		xLastWakeTime = xTaskGetTickCount();
@@ -307,29 +322,23 @@ void prvTask2(void *pvParameters)
 		xTaskNotifyGive(xTask1);
 	}
 }
-#endif
+#endif	
 
-#if test_PIT_CH1_INTERRUPT
-
-#define PIT_CH1 1
-/* Debug variable to keep the count of times the ISR is executed. */
-uint32_t count=0;
-
-void pit_ch1_ISR(void)
-{
-    PIT.CH[PIT_CH1].TFLG.R = 0x00000001;
-    count++;
-}
-#endif
 
 int main( void )
 {
 	uint32_t mode;
-	
+
 #if test_PIT_CH1_INTERRUPT
 	uint16_t interrupt_enable = 1;
 	uint8_t priority = PIT_CH1_INT_PRIORITY;
 	uint32_t ld_val = ((configCPU_CLOCK_HZ/20) -1);
+#endif
+	
+#ifdef DEBUG
+	uint8_t channel;
+	uint32_t interrupt_enable;
+	uint16_t priority;
 #endif
 	
 	//init_sys();
@@ -337,6 +346,7 @@ int main( void )
 	
 	mode = 0x4; /* RUN0 mode */
 	mode_entry_change_mode(mode);
+	
 
 	SIU.PCR[68].R = 0x0200;				/* Program the drive enable pin of LED1 (PE4) as output*/
 	SIU.PCR[69].R = 0x0200;				/* Program the drive enable pin of LED2 (PE5) as output*/
@@ -349,7 +359,7 @@ int main( void )
   			interrupt_enable, priority, ld_val);
   	PIT_START_TIMER(PIT_CH1);
 #endif
-
+	
 #if test_MULTITASK_SWITCHING //Enable this code to check multiple task switching 
 	xTaskCreate( vLEDTask4, ( const char * const ) "LedTask4", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
 	xTaskCreate( vLEDTask3, ( const char * const ) "LedTask3", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );

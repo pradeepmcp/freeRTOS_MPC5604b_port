@@ -281,55 +281,14 @@ void vSemTaskTake(void *pvParameters)
 }
 #endif
 
-#if test_TASK_NOTIFICATIONS
-TaskHandle_t	xTask1 = NULL;
-TaskHandle_t	xTask2 = NULL;
-
-void prvTask1(void *pvParameters)
-{
-	TickType_t xLastWakeTime;
-
-	for(;;){
-		ulTaskNotifyTake( pdTRUE, portMAX_DELAY );
-		TOGGLE_LED1();
-	}
-}
-
-void prvTask2(void *pvParameters)
-{
-	TickType_t xLastWakeTime;
-
-	for(;;){
-		while(!xTask1){};
-		TOGGLE_LED2();
-		xLastWakeTime = xTaskGetTickCount();
-		vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(500));
-		xTaskNotifyGive(xTask1);
-	}
-}
-#endif
-
-#if test_PIT_CH1_INTERRUPT
-
-#define PIT_CH1 1
-/* Debug variable to keep the count of times the ISR is executed. */
-uint32_t count=0;
-
-void pit_ch1_ISR(void)
-{
-    PIT.CH[PIT_CH1].TFLG.R = 0x00000001;
-    count++;
-}
-#endif
-
 int main( void )
 {
 	uint32_t mode;
-	
-#if test_PIT_CH1_INTERRUPT
-	uint16_t interrupt_enable = 1;
-	uint8_t priority = PIT_CH1_INT_PRIORITY;
-	uint32_t ld_val = ((configCPU_CLOCK_HZ/20) -1);
+
+#ifdef DEBUG
+	uint8_t channel;
+	uint32_t interrupt_enable;
+	uint16_t priority;
 #endif
 	
 	//init_sys();
@@ -338,17 +297,34 @@ int main( void )
 	mode = 0x4; /* RUN0 mode */
 	mode_entry_change_mode(mode);
 
+#ifdef DEBUG
+	SIU.PCR[68].R = 0x0200;				/* Program the drive enable pin of LED1 (PE4) as output*/
+	SIU.PGPDO[2].R |= 0x0f000000;		/* Disable LEDs*/
+	SIU.PGPDO[2].R &= 0x07000000;		/* Enable LED1*/
+	
+	// start timer
+	
+	channel = 0;
+	interrupt_enable = 1;
+	priority = 15;
+	pit_config(pit_ch0_isr, channel,interrupt_enable, priority,0x03D09000);
+	PIT_START_TIMER(channel);
+	portYIELD();
+	
+	//xTaskCreate( vLEDTask, ( const char * const ) "LedTask", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
+	//vTaskStartScheduler();
+	
+	while (1)
+	{
+		
+	}
+#endif
+	
 	SIU.PCR[68].R = 0x0200;				/* Program the drive enable pin of LED1 (PE4) as output*/
 	SIU.PCR[69].R = 0x0200;				/* Program the drive enable pin of LED2 (PE5) as output*/
 	SIU.PCR[70].R = 0x0200;				/* Program the drive enable pin of LED3 (PE6) as output*/
 	SIU.PCR[71].R = 0x0200;				/* Program the drive enable pin of LED4 (PE7) as output*/
 	SIU.PGPDO[2].R |= 0x0f000000;	
-
-#if test_PIT_CH1_INTERRUPT
-  	pit_config(pit_ch1_ISR, PIT_CH1,
-  			interrupt_enable, priority, ld_val);
-  	PIT_START_TIMER(PIT_CH1);
-#endif
 
 #if test_MULTITASK_SWITCHING //Enable this code to check multiple task switching 
 	xTaskCreate( vLEDTask4, ( const char * const ) "LedTask4", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
@@ -380,14 +356,6 @@ int main( void )
 	binarySem = xSemaphoreCreateBinary();
 	xTaskCreate( vSemTaskSend, ( const char * const ) "SemTaskSend", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
 	xTaskCreate( vSemTaskTake, ( const char * const ) "SemTaskTake", configMINIMAL_STACK_SIZE, (void*)0x0, mainLED_TASK_PRIORITY, NULL );
-#endif
-	
-#if test_TASK_NOTIFICATIONS
-	/*
-	 * Toggles LED1 and LED2 using just one delay function and task notifications as mutex. 
-	 */
-	xTaskCreate( prvTask1, "Task1", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, &xTask1 );
-	xTaskCreate( prvTask2, "Task2", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, &xTask2 );
 #endif
 
 	// keep demo functions above starting scheduler

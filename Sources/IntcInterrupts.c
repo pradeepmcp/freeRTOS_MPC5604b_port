@@ -28,7 +28,11 @@
 
 #include "MPC5604B.h"         /* MCU platform development header       */
 
-#include "IntcInterrupts.h"     /* Implement functions from this file */ 
+#include "IntcInterrupts.h"     /* Implement functions from this file */
+
+
+// MCP
+//extern  volatile void *  pxCurrentTCB;  
 
 /*---------------------------------------------------------------------------*/
 /* Inline Assembler Defines                                                  */
@@ -44,6 +48,9 @@ MAKE_HLI_ADDRESS(INTC_EOIR, &INTC.EOIR.R)
 
 /** Address of the MCR -- used for e200z0h initialization */
 MAKE_HLI_ADDRESS(INTC_MCR, &INTC.MCR.R)
+
+//  MCP
+//MAKE_HLI_ADDRESS(pxCurrentTCB_v, &pxCurrentTCB)
 
 /*---------------------------------------------------------------------------*/
 /* Function Implementations                                                  */
@@ -62,10 +69,7 @@ MAKE_HLI_ADDRESS(INTC_MCR, &INTC.MCR.R)
 */ 
 INTCInterruptFn INTCInterruptsHandlerTable[INTC_INTERRUPTS_REQUEST_VECTOR_TABLE_SIZE];
 #pragma pop
-
-/* The following INTCInterrupt handler is moved to portasm.s */
-
-#if 0
+#if 0 //moved to portasm.s
 #pragma push /* save the current state */
 #pragma force_active on
 #pragma function_align 16 /* We use 16 bytes alignment for Exception handlers */
@@ -92,6 +96,20 @@ __declspec(section ".__exception_handlers")
 __asm void INTC_INTCInterruptHandler(void)
 {
 nofralloc
+
+	/*
+	 * epilog:
+	 * portSAVE_CONTEXT()
+	 * portPUSH_TASK()
+	 * 
+	 * ISR()
+	 * 
+	 * prolog:
+	 * portPOP_TASK()
+	 * portRESTORE_CONTEXT()
+	 * 
+	 */
+
 	portSAVE_CONTEXT()
 
 #if 0 //working copy

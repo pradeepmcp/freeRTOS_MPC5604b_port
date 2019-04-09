@@ -28,8 +28,11 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+//#include "hw_platform.h"
+
 /*-----------------------------------------------------------*/
 #define TICK_INTERVAL  ((configCPU_CLOCK_HZ / configTICK_RATE_HZ ) - 1UL)
+
 
 /* Definitions to set the initial MSR of each task. */
 #define portCRITICAL_INTERRUPT_ENABLE    ( 1UL << 17UL )
@@ -207,31 +210,197 @@ void vPortEndScheduler( void )
         portNOP();
       }
 }
+/*-----------------------------------------------------------*/
+int global_count = 0;
+//__declspec(interrupt)
+//__declspec(section ".__exception_handlers")
 
 void vPortTickISR(void)
 {
-    PIT.CH[TICK_PIT_CHANNEL].TFLG.R = 0x00000001;
+#if 0
+  // clear PIT channel IRQ flag
+  HWPIT_TFLG(configUSE_PIT_CHANNEL) = HWPIT_TFLG_TIF;
+
+    /* Only reschedule if a higher priority task was unblocked */
+    if (xTaskIncrementTick() != pdFALSE)
+    {
+  
+  		#if (configUSE_PREEMPTION == 1)
+        vTaskSwitchContext();
+		#endif
+	}
+#endif
+    PIT.CH[0].TFLG.R = 0x00000001;
+    global_count++;
     if (xTaskIncrementTick() != pdFALSE)
 	{
 		#if (configUSE_PREEMPTION == 1)
 		vTaskSwitchContext();
-		// ISR epilog will pop and restore the new task's context. 
+		// need to pop the task. ISR epilog were restore the new context. 
 		#endif
 	}
 }
 
 
 void prvPortTimerSetup(void)
-{
+{ 
+#if 0
+  OS_InstallInterruptHandler(vPortTickISR, HWPIT_GET_INTID(configUSE_PIT_CHANNEL), 1 /* priority */);
+
+  HWPIT_MCR = HWPIT_MCR_FRZ; /* freeze bit on - stop while debugging */
+
+  // PIT_LDVAL : tick period
+  HWPIT_LDVAL(configUSE_PIT_CHANNEL) = TICK_INTERVAL;
+ 
+  // PIT_RTI_TCTRL: start channel, enable IRQ
+  HWPIT_TCTRL(configUSE_PIT_CHANNEL) = HWPIT_TCTRL_TEN | HWPIT_TCTRL_TIE; 
+#endif
 	uint32_t interrupt_enable;
 	uint16_t priority;
 	uint32_t ld_val;
 	
   	interrupt_enable = 1;
-  	priority = TICK_INTERRUPT_PRIOROTY;
+  	priority = 15;
   	ld_val = TICK_INTERVAL;
   	
-  	pit_config(vPortTickISR, TICK_PIT_CHANNEL,
+  	pit_config(vPortTickISR, configUSE_PIT_CHANNEL,
   			interrupt_enable, priority, ld_val);
-  	PIT_START_TIMER(TICK_PIT_CHANNEL);
+  	PIT_START_TIMER(configUSE_PIT_CHANNEL);
 }
+
+#if 0 // use the definition in portasm.s
+void vPortStartFirstTask (void)
+{
+	//portSAVE_CONTEXT() 	/* Does the main thread stack needs to be saved here?
+	portPOP_TASK();			/* pxCurrentTCB should already point to the highest priority task */
+	portRESTORE_CONTEXT();
+	__asm (" se_rfi ");					/* Return into the first task */
+}
+#endif
+
+#if 0
+
+static portrestore_bkp() {
+
+	lwz     r31, 0x94 (r1)      /* Restore r12 */
+	lwz     r30, 0x90 (r1)      /* Restore r11 */
+	lwz     r29, 0x8c (r1)      /* Restore r10 */
+	lwz     r28,  0x88 (r1)      /* Restore r9 */
+	lwz     r27,  0x84 (r1)      /* Restore r8 */
+	lwz     r26,  0x80 (r1)      /* Restore r7 */
+	lwz     r25, 0x7C (r1)      /* Restore r6 */
+	lwz     r24, 0x78 (r1)      /* Restore r5 */
+	lwz     r23, 0x74 (r1)      /* Restore r4 */
+	
+	lwz     r22, 0x70 (r1)      /* Restore r12 */
+	lwz     r21, 0x6c (r1)      /* Restore r11 */
+	lwz     r20, 0x68 (r1)      /* Restore r10 */
+	lwz     r19,  0x64 (r1)      /* Restore r9 */
+	lwz     r18,  0x60 (r1)      /* Restore r8 */
+	lwz     r17,  0x5C (r1)      /* Restore r7 */
+	lwz     r16, 0x58 (r1)      /* Restore r6 */
+	lwz     r15, 0x54 (r1)      /* Restore r5 */
+	lwz     r14, 0x50 (r1)      /* Restore r4 */
+
+
+#if 0
+	lwz     r0,  0x20 (r1)
+	mtcr    r0                  /* Restore CR */
+	
+	lwz     r0,  0x1C (r1)
+	mtxer   r0                  /* Restore XER */
+	
+	lwz     r0,  0x18 (r1)
+	mtctr   r0                  /* Restore CTR */
+	
+	lwz     r0,  0x14 (r1)
+	mtlr    r0                  /* Restore LR */
+	
+	lwz     r12, 0x4C (r1)      /* Restore r12 */
+	lwz     r11, 0x48 (r1)      /* Restore r11 */
+	lwz     r10, 0x44 (r1)      /* Restore r10 */
+	lwz     r9,  0x40 (r1)      /* Restore r9 */
+	lwz     r8,  0x3C (r1)      /* Restore r8 */
+	lwz     r7,  0x38 (r1)      /* Restore r7 */
+	lwz     r6,  0x34 (r1)      /* Restore r6 */
+	lwz     r5,  0x30 (r1)      /* Restore r5 */
+	lwz     r4,  0x2C (r1)      /* Restore r4 */
+	
+
+	
+	lwz     r0,  0x10 (r1)
+	mtsrr1  r0                /* Restore SRR1 (must be done before enabling EE) */
+	
+	lwz     r0,  0x0C (r1)
+	mtsrr0  r0                /* Restore SRR0 (must be done before enabling EE) */
+	
+	lwz     r3,  0x28 (r1)    /* Restore r3 */
+	
+	lwz 	r0,  0x24 (r1)    /* Restore r0 working register  */
+	
+	e_add16i      r1, r1, 0x98     //Reclaim stack space
+#endif	
+#if 0
+  .long 0x1881100C             //load SRR0, SRR1 by e_lmvsrrw 0x0C (r1)
+
+
+  .long 0x18211014             //load CR, LR, CTR, XER by e_lmvsprw 0x14 (r1)
+
+  
+  .long 0x18011024             //load r0, r3-r12 by e_lmvgprw 0x24 (r1)
+  
+
+  e_lmw     r14, 0x50 (r1)     //load word multiple r14-r31
+
+
+  e_add16i      r1, r1, 0x98     //Reclaim stack space
+#endif
+}
+#endif
+
+
+#if 0
+__asm void portPUSH_TASK(void)
+{
+  e_lis     r3, pxCurrentTCB@ha
+  e_lwz     r3, pxCurrentTCB@l(r3)
+  
+  se_stw    r1, 0x00 (r3)         //store stack pointer
+}
+
+__asm void portPOP_TASK(void)
+{
+  e_lis     r3, pxCurrentTCB@ha
+  e_lwz     r3, pxCurrentTCB@l(r3)
+
+  se_lwz    r1, 0x00 (r3)    # load stack pointer
+}
+#endif 
+#if 0
+__asm void vPortYield(void)
+{
+    e_bl portSAVE_CONTEXT
+    //portPUSH_TASK
+
+    e_bl vTaskSwitchContext
+
+    //portPOP_TASK
+    //portRESTORE_CONTEXT();
+    
+    //Return into a task
+    //se_rfi
+
+  	//end of assembler code
+}
+#endif
+#if 0
+__asm void vPortStartFirstTask(void)
+{
+  portPOP_TASK            //pxCurrentTCB should already point to the highest priority task
+  portRESTORE_CONTEXT
+  
+  
+  se_rfi                  //Return into the first task
+}
+#endif
+

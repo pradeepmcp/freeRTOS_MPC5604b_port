@@ -47,6 +47,7 @@
 #define PIT_START_TIMER(channel) 			\
 {											\
 	PIT.CH[channel].TCTRL.B.TEN = 1; 		\
+	PIT.PITMCR.B.MDIS = 0;					\
 }
 
 /**********************  Function Prototype here *************************/

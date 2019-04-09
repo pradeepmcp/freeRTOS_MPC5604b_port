@@ -40,7 +40,7 @@
 #define configUSE_FPU                               0
 
 /* MPC5604B specific: pit channel to use 0-15 */
-#define TICK_PIT_CHANNEL                     0
+#define configUSE_PIT_CHANNEL                     0
 
 
 /* Co-routine definitions. */
@@ -70,17 +70,7 @@ to exclude the API function. */
 #define test_TASK_PRIORITY_API					  0
 #define test_MULTITASK_SWITCHING 				  0
 #define test_QUEUE_SEND_RECEIVE_API			      0
-#define test_BINARY_SEMAPHORE_API			      0
-#define test_TASK_NOTIFICATIONS					  1
-#define test_PIT_CH1_INTERRUPT					  1
-
-/* Interrupt priorities */
-/* RTOS tick interrupt will have the lowest priority 
- * All other peripheral interrupts should be same or greater than TICK_INTERRUPT_PRIORITY 
- */
-#define TICK_INTERRUPT_PRIOROTY					  1
-#define PIT_CH1_INT_PRIORITY					  2
-
+#define test_BINARY_SEMAPHORE_API			      1
 
 #define configASSERT( x )\
 		if ( ( x ) == pdFALSE )\

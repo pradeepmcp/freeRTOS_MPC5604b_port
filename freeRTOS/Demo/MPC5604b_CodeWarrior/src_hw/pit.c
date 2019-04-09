@@ -52,17 +52,15 @@
 
 void pit_init_fnc(void)
 {
-    PIT.PITMCR.B.MDIS   = 0;    
-        /*Enable PIT for initialization         */
-    PIT.PITMCR.B.FRZ = 1;
-    	/*Enable Freeze of timers during debug mode */
+    PIT.PITMCR.B.MDIS   = 1;    
+        /*Disable PIT for initialization         */
 
 /* ----------------------------------------------------------- */
 /*                     Configure Load Value Registers                */
 /* ----------------------------------------------------------- */
 
-    PIT.CH[0].LDVAL.R  = 0x00000000;    
-        /*value loaded in the Timer0: 0    */
+    PIT.CH[0].LDVAL.R  = 0x03D09000;    
+        /*value loaded in the Timer0: 128000    */
     
     PIT.CH[1].LDVAL.R  = 0x00000000;    
         /*value loaded in the Timer1: 0    */
@@ -91,8 +89,8 @@ void pit_init_fnc(void)
 /*                     Enable Interrupts                  */
 /* ----------------------------------------------------------- */
 
-    PIT.CH[0].TCTRL.B.TIE  = 0x0;    
-        /*Timer 0 Interrupt : Disabled    */
+    PIT.CH[0].TCTRL.B.TIE  = 0x1;    
+        /*Timer 0 Interrupt : Enabled    */
     
     PIT.CH[1].TCTRL.B.TIE  = 0x0;    
         /*Timer 1 Interrupt : Disabled    */
@@ -121,8 +119,8 @@ void pit_init_fnc(void)
 /*                   Start Timers                 */
 /* ----------------------------------------------------------- */
 
-    PIT.CH[0].TCTRL.B.TEN = 0x0;    
-        /*Start Timer 0 is : Disabled    */
+    PIT.CH[0].TCTRL.B.TEN = 0x1;    
+        /*Start Timer 0 is : Enabled    */
     
     PIT.CH[1].TCTRL.B.TEN = 0x0;    
         /*Start Timer 1 is : Disabled    */
@@ -145,15 +143,21 @@ void pit_init_fnc(void)
     PIT.CH[7].TCTRL.B.TEN = 0x0;    
         /*Start Timer 7 is : Disabled    */
     
+
+    PIT.PITMCR.B.MDIS = 1;    
+        /*PIT Module : Enabled        */
+
 }
 
 void pit_config(INTCInterruptFn handler_fn, uint8_t channel, uint32_t interrupt_enable, uint16_t priority, uint32_t ld_val)
 {
+	PIT.PITMCR.B.MDIS = 1;
+	PIT.PITMCR.B.FRZ = 1;
 	PIT.CH[channel].TCTRL.B.TEN = 0;
-	PIT.CH[channel].TCTRL.B.TIE = interrupt_enable;
+	PIT.CH[channel].TCTRL.R  |= interrupt_enable;
 	PIT.CH[channel].LDVAL.R = ld_val;
 	INTC.PSR[PIT_PSR_BASE+channel].B.PRI = priority;
-	INTC_InstallINTCInterruptHandler(handler_fn, (PIT_PSR_BASE+channel), (unsigned char) priority);
+	INTC_InstallINTCInterruptHandler(handler_fn, PIT_PSR_BASE, (unsigned char) priority);
 }
 
 /*

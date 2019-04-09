@@ -72,6 +72,13 @@ to exclude the API function. */
 #define test_QUEUE_SEND_RECEIVE_API			      0
 #define test_BINARY_SEMAPHORE_API			      1
 
+#define configASSERT( x )\
+		if ( ( x ) == pdFALSE )\
+		{\
+		  taskDISABLE_INTERRUPTS()\
+		  for( ;; );\
+		}\
+
 #endif /* FREERTOS_CONFIG_H */
 
 
